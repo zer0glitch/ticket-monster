@@ -24,6 +24,12 @@
       <!-- Specify the JBoss AS directory to be the JBOSS_HOME environment 
          variable -->
       <jboss.home>${env.JBOSS_HOME}</jboss.home>
+      
+      <errai.version>2.0-SNAPSHOT</errai.version>
+      <gwt.version>2.4.0</gwt.version>
+      <gwt.maven.version>2.4.0</gwt.maven.version>
+      <mvel.version>2.1.Beta6</mvel.version>
+      
    </properties>
 
    <dependencyManagement>
@@ -126,6 +132,97 @@
          </exclusions>
       </dependency>
 
+
+      <!-- The next set of dependencies are for Errai, which we use for the TicketMonster admin console -->
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-bus</artifactId>
+      <version>${errai.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.inject</groupId>
+          <artifactId>javax.inject</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>jsr250-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-ioc</artifactId>
+      <version>${errai.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.inject</groupId>
+          <artifactId>javax.inject</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>jsr250-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-tools</artifactId>
+      <version>${errai.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mvel</groupId>
+      <artifactId>mvel2</artifactId>
+      <version>${mvel.version}</version>
+    </dependency>
+
+    <!-- CDI Integration Modules -->
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-cdi-client</artifactId>
+      <version>${errai.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-javax-enterprise</artifactId>
+      <version>${errai.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>errai-weld-integration</artifactId>
+      <version>${errai.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jboss.weld.servlet</groupId>
+      <artifactId>weld-servlet</artifactId>
+      <version>1.1.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-user</artifactId>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <version>${gwt.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.errai</groupId>
+      <artifactId>jboss7-support</artifactId>
+      <version>${errai.version}</version>
+    </dependency>
+      <!-- End of Errai dependencies -->
+
+
       <!-- Now we declare any tools needed -->
 
       <!-- Annotation processor to generate the JPA 2.0 metamodel classes 
@@ -163,12 +260,15 @@
    </dependencies>
 
    <build>
+   
       <!-- Maven will append the version to the finalName (which is the name 
          given to the generated war, and hence the context root) -->
       <finalName>${project.artifactId}</finalName>
+      
       <plugins>
+      
          <!-- Compiler plugin enforces Java 1.6 compatibility and activates 
-            annotation processors -->
+              annotation processors -->
          <plugin>
             <artifactId>maven-compiler-plugin</artifactId>
             <version>2.3.1</version>
@@ -177,15 +277,53 @@
                <target>1.6</target>
             </configuration>
          </plugin>
+         
          <plugin>
             <artifactId>maven-war-plugin</artifactId>
             <version>2.1.1</version>
             <configuration>
-               <!-- Java EE 6 doesn't require web.xml, Maven needs to catch 
-                  up! -->
-               <failOnMissingWebXml>false</failOnMissingWebXml>
+            
+               <!-- We must exclude GWT client local classes from the deployment, or classpath scanners
+                    such as Hibernate and Weld get confused when the webapp is bootstrapping. -->
+               <packagingExcludes>**/javax/**/*.*,**/client/local/**/*.class</packagingExcludes>
+               
+               <archive>
+                  <manifestEntries>
+                    <Dependencies>org.jboss.as.naming,org.jboss.as.server,org.jboss.msc</Dependencies>
+                  </manifestEntries>
+               </archive>
             </configuration>
          </plugin>
+         
+         <!-- GWT plugin to compile client-side java code to javascript and 
+              to run GWT development mode -->
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <version>${gwt.maven.version}</version>
+            <configuration>
+               <inplace>true</inplace>
+               <logLevel>INFO</logLevel>
+               <extraJvmArgs>-Xmx512m</extraJvmArgs>
+               
+               <!-- Configure GWT's development mode (formerly known as hosted 
+                    mode) to not start the default server (embedded jetty), but to download the 
+                    HTML host page from the configured runTarget. -->
+               <noServer>true</noServer>
+               <runTarget>http://localhost:8080/ticket-monster/AdminConsole.html</runTarget>
+               
+            </configuration>
+            <executions>
+              <execution>
+                 <goals>
+                    <goal>clean</goal>
+                    <goal>resources</goal>
+                    <goal>compile</goal>
+                </goals>
+               </execution>
+            </executions>
+         </plugin>
+         
          <!-- The JBoss AS plugin deploys your war to a local JBoss AS container -->
          <!-- To use, set the JBOSS_HOME environment variable and run: mvn 
             package jboss-as:deploy -->
@@ -195,8 +333,39 @@
             <version>7.1.0.CR1</version>
          </plugin>
 
-
       </plugins>
+      
+      <pluginManagement>
+        <plugins>
+        
+          <!-- m2e (Maven integration for Eclipse) requires the following configuration -->
+          <plugin>
+            <groupId>org.eclipse.m2e</groupId>
+            <artifactId>lifecycle-mapping</artifactId>
+            <version>1.0.0</version>
+            <configuration>
+              <lifecycleMappingMetadata>
+                <pluginExecutions>
+                  <pluginExecution>
+                    <pluginExecutionFilter>
+                      <groupId>org.codehaus.mojo</groupId>
+                      <artifactId>gwt-maven-plugin</artifactId>
+                      <versionRange>[2.3.0,)</versionRange>
+                      <goals>
+                        <goal>resources</goal>
+                      </goals>
+                    </pluginExecutionFilter>
+                    <action>
+                      <execute />
+                    </action>
+                  </pluginExecution>
+                </pluginExecutions>
+              </lifecycleMappingMetadata>
+            </configuration>
+          </plugin>
+        </plugins>
+      </pluginManagement>
+      
    </build>
 
    <profiles>
@@ -321,4 +490,23 @@
       </profile>
 
    </profiles>
+   
+   <repositories>
+      <!-- The JBoss Community public repository is a composite repository 
+         of several major repositories -->
+      <!-- see http://community.jboss.org/wiki/MavenGettingStarted-Users -->
+      <repository>
+         <id>jboss-public-repository</id>
+         <name>JBoss Repository</name>
+         <url>http://repository.jboss.org/nexus/content/groups/public</url>
+         <!-- These optional flags are designed to speed up your builds 
+            by reducing remote server calls -->
+         <releases>
+         </releases>
+         <snapshots>
+            <enabled>false</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+   
 </project>
