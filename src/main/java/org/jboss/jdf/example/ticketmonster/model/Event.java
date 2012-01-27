@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * Represents an event, which may have multiple performances with different dates and
@@ -21,6 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Marius Bogoevici
  */
 @Entity
+@Portable
 public class Event implements Serializable {
     private static final long serialVersionUID = -7237875436163170627L;
 

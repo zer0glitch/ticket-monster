@@ -13,12 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * @author Marius Bogoevici
  */
 @Entity
 @JsonIgnoreProperties("show")
+@Portable
 public class Performance implements Serializable {
 
     private static final long serialVersionUID = -108405033615497885L;

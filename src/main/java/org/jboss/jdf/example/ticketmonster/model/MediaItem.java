@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.URL;
 
+import org.jboss.errai.common.client.api.annotations.Portable;
+
 /**
  * A reference to a media object such as images, sound bites, video recordings, that can
  * be used in the application.
@@ -21,6 +23,7 @@ import org.hibernate.validator.constraints.URL;
  */
 @Entity
 @JsonIgnoreProperties("content")
+@Portable
 public class MediaItem implements Serializable {
 
     private static final long serialVersionUID = -3190368407410663590L;

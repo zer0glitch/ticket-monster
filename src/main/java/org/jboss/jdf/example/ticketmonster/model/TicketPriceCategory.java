@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * Contains price categories - each category represents the price for a ticket
@@ -22,6 +23,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  */
 @Entity @JsonIgnoreProperties("show")
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"SECTION_ID","SHOW_ID","TICKETCATEGORY_ID"}))
+@Portable
 public class TicketPriceCategory implements Serializable {
     private static final long serialVersionUID = 6649855367578381386L;
 

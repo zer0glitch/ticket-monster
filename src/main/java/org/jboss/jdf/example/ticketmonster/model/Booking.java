@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * A Booking represents a set of tickets purchased for a performance.
@@ -27,6 +28,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Marius Bogoevici
  */
 @Entity
+@Portable
 public class Booking {
 
     @Id

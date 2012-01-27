@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * Lookup table containing event categories
@@ -17,6 +18,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Shane Bryzak
  */
 @Entity
+@Portable
 public class EventCategory implements Serializable {
     private static final long serialVersionUID = 2125778126462925768L;
 

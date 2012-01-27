@@ -28,6 +28,8 @@ public abstract class BaseEntityService<T> {
 
     private Class<T> entityClass;
 
+    public BaseEntityService() {}
+    
     public BaseEntityService(Class<T> entityClass) {
         this.entityClass = entityClass;
     }

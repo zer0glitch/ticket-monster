@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * A lookup table containing the various ticket categories.  E.g. Adult, Child,
@@ -18,6 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Shane Bryzak
  */
 @Entity
+@Portable
 public class TicketCategory implements Serializable {
     private static final long serialVersionUID = 6591486291129475067L;
 

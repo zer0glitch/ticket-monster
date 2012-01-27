@@ -16,12 +16,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+<<<<<<< HEAD
+=======
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jboss.errai.common.client.api.annotations.Portable;
+
 /**
  * Represents a single venue
  *
  * @author Shane Bryzak
  */
 @Entity
+@Portable
 public class Venue implements Serializable {
     private static final long serialVersionUID = -6588912817518967721L;
 

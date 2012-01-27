@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.ejb.Stateful;
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -42,6 +43,9 @@ public class BookingService extends BaseEntityService<Booking> {
 
     @Inject
     SeatAllocationService seatAllocationService;
+
+    @Inject
+    private Event<Booking> bookingEvent;
 
     public BookingService() {
         super(Booking.class);    //To change body of overridden methods use File | Settings | File Templates.
@@ -114,6 +118,7 @@ public class BookingService extends BaseEntityService<Booking> {
             booking.setPerformance(performance);
             booking.setCancellationCode("abc");
             getEntityManager().persist(booking);
+            bookingEvent.fire(booking);
             return Response.ok().entity(booking).type(MediaType.APPLICATION_JSON_TYPE).build();
         } catch (ConstraintViolationException e) {
             Map<String, Object> errors = new HashMap<String, Object>();

@@ -3,6 +3,8 @@ package org.jboss.jdf.example.ticketmonster.model;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * A section is a specific area within a venue layout.  A venue layout may
@@ -19,6 +22,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Shane Bryzak
  */
 @Entity @JsonIgnoreProperties({"venue", "sectionRows"})
+@Portable
 public class Section implements Serializable {
     private static final long serialVersionUID = 4293585694763708395L;
 

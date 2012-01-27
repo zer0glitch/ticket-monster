@@ -14,9 +14,9 @@
     <inherits name="org.jboss.errai.enterprise.CDI"/>
     
     <!-- Model classes that are shared with the rest of the application -->
-<!--     <source path="model"/>
- -->    
+   <source path="model"/>
+       
     <!-- Classes that are specific to the admin console; not shared with rest of app -->
-    <source path="admin/client"/>
+    <source path="admin"/>
     
 </module>

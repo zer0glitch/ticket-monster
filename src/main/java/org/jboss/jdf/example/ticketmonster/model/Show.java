@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 
 /**
@@ -25,6 +26,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Shane Bryzak
  */
 @Entity
+@Portable
 public class Show implements Serializable {
 
     private static final long serialVersionUID = -108405033615497885L;

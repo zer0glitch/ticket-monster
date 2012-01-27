@@ -2,10 +2,13 @@ package org.jboss.jdf.example.ticketmonster.model;
 
 import javax.persistence.Embeddable;
 
+import org.jboss.errai.common.client.api.annotations.Portable;
+
 /**
  * @author Marius Bogoevici
  */
 @Embeddable
+@Portable
 public class Address {
 
     private String street;
