@@ -4,7 +4,9 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;
 
+
 import java.math.BigDecimal;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +31,9 @@ import org.jboss.errai.common.client.api.annotations.Portable;
  */
 @Entity
 @Portable
-public class Booking {
+public class Booking implements Serializable {
+
+    private static final long serialVersionUID = -1;
 
     @Id
     @GeneratedValue(strategy=IDENTITY)

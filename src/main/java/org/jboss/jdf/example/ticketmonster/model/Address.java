@@ -1,5 +1,7 @@
 package org.jboss.jdf.example.ticketmonster.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Embeddable;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
@@ -9,7 +11,9 @@ import org.jboss.errai.common.client.api.annotations.Portable;
  */
 @Embeddable
 @Portable
-public class Address {
+public class Address implements Serializable {
+
+    private static final long serialVersionUID = -1;
 
     private String street;
     private String city;
