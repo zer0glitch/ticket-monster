@@ -5,10 +5,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 
+import org.jboss.errai.common.client.api.annotations.Portable;
+
 /**
  * @author Marius Bogoevici
  */
 @Embeddable
+@Portable
 public class Seat {
 
     @Min(1)
@@ -21,7 +24,7 @@ public class Seat {
     private Section section;
 
     /** Constructor for persistence */
-    protected Seat() {
+    public Seat() {
     }
 
     public Seat(Section section, int rowNumber, int number) {

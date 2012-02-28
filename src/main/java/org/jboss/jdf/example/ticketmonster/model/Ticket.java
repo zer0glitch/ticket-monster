@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * An allocation consists of one or more contiguous sold seats
@@ -24,6 +25,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
  * @author Marius Bogoevici
  */
 @Entity
+@Portable
 public class Ticket implements Serializable {
     private static final long serialVersionUID = 8738724150877088864L;
 
@@ -39,11 +41,8 @@ public class Ticket implements Serializable {
     private float price;
 
 
-    /**
-     * Np-arg constructor for persistence
-     */
-    protected Ticket() {
-
+    /** No-arg constructor for persistence */
+    public Ticket() {
     }
 
     public Ticket(Seat seat, TicketCategory ticketCategory, float price) {

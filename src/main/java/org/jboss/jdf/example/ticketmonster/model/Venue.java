@@ -16,8 +16,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-<<<<<<< HEAD
-=======
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.jboss.errai.common.client.api.annotations.Portable;
 
