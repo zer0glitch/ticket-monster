@@ -24,7 +24,7 @@ public class TicketMonsterAdmin {
     }
     
     public void onBooking(@Observes Booking booking) {
-      String text = booking.getCustomer().getEmail() + " created booking id:" + booking.getId();
+      String text = booking.getContactEmail() + " created booking id:" + booking.getId();
       RootPanel.get().add(new Label(text));
     }
 }
