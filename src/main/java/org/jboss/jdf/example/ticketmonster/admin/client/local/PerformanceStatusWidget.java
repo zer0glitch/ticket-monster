@@ -30,14 +30,23 @@ import com.google.gwt.user.client.ui.Label;
 public class PerformanceStatusWidget extends Composite {
 
     private Label bookingStatusLabel = new Label();
+    
     private HorizontalPanel progressBar = new HorizontalPanel();
+    private Label soldPercentLabel;
+    private Label availablePercentLabel;
+    
     private Performance performance;
+    private int soldTickets;
+    private int capacity;
 
     public PerformanceStatusWidget(Performance performance) {
         this.performance = performance;
-
-        setBookingStatus(2000, performance.getShow().getVenue().getCapacity());
-        setProgress(2000f, (float)performance.getShow().getVenue().getCapacity());
+        
+        soldTickets = AdminConsole.getOccupiedCountForPerformance(performance);
+        capacity = performance.getShow().getVenue().getCapacity();
+        
+        setBookingStatus();
+        setProgress();
         
         HorizontalPanel performancePanel = new HorizontalPanel();
         String date = DateTimeFormat.getFormat(PredefinedFormat.DATE_TIME_SHORT).format(performance.getDate());
@@ -48,18 +57,32 @@ public class PerformanceStatusWidget extends Composite {
         initWidget(performancePanel);
     }
 
-    private void setBookingStatus(int sold, int capacity) {
-        bookingStatusLabel.setText(sold + " of " + capacity + " tickets booked");
+    private void setBookingStatus() {
+        bookingStatusLabel.setText(soldTickets + " of " + capacity + " tickets booked");
     }
     
-    private void setProgress(float sold, float capacity) {
-        int soldPercent = Math.round((sold / capacity) * 100);
+    public void updateBookingStatus() {
+      this.soldTickets = AdminConsole.getOccupiedCountForPerformance(performance);
+      setBookingStatus();
+      setProgress();
+    }
+    
+    private void setProgress() {
+        int soldPercent = Math.round((soldTickets / (float) capacity) * 100);
+      
+        if (soldPercentLabel != null) {
+          progressBar.remove(soldPercentLabel);
+        }
         
-        Label soldPercentLabel = new Label();
+        if (availablePercentLabel != null) {
+          progressBar.remove(availablePercentLabel);
+        }
+        
+        soldPercentLabel = new Label();
         soldPercentLabel.getElement().setAttribute(
                 "style", "height: 18px; width: " + soldPercent + "px;" + " background-color: #cc0000");
         
-        Label availablePercentLabel = new Label();
+        availablePercentLabel = new Label();
         availablePercentLabel.getElement().setAttribute(
                 "style", "height: 18px; width: " + (100 - soldPercent) + "px;" + " background-color: #009900");
     

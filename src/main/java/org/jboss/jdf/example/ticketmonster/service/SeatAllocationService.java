@@ -1,4 +1,4 @@
-package org.jboss.jdf.example.ticketmonster.services;
+package org.jboss.jdf.example.ticketmonster.service;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
+import org.jboss.jdf.example.ticketmonster.model.Booking;
 import org.jboss.jdf.example.ticketmonster.model.Performance;
 import org.jboss.jdf.example.ticketmonster.model.Seat;
 import org.jboss.jdf.example.ticketmonster.model.Section;

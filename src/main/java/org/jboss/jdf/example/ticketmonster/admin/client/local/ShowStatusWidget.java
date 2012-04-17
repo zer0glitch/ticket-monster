@@ -31,12 +31,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class ShowStatusWidget extends Composite {
 
-    private Show show;
     private Map<Long, PerformanceStatusWidget> performances = new HashMap<Long, PerformanceStatusWidget>();
     
     public ShowStatusWidget(Show show) {
-        this.show = show;
-        
         VerticalPanel widgetPanel = new VerticalPanel();
         widgetPanel.setStyleName("show-status");
         widgetPanel.add(new Label(show.getEvent().getName() + " @ " + show.getVenue()));
@@ -48,5 +45,12 @@ public class ShowStatusWidget extends Composite {
         }
         
         initWidget(widgetPanel);
+    }
+    
+    public void updatePerformance(Performance performance) {
+        PerformanceStatusWidget pw = performances.get(performance.getId());
+        if (pw != null) {
+          pw.updateBookingStatus();
+        }
     }
 }

@@ -30,7 +30,7 @@ import org.jboss.jdf.example.ticketmonster.model.Section;
 import org.jboss.jdf.example.ticketmonster.model.Ticket;
 import org.jboss.jdf.example.ticketmonster.model.TicketCategory;
 import org.jboss.jdf.example.ticketmonster.model.TicketPriceCategory;
-import org.jboss.jdf.example.ticketmonster.services.SeatAllocationService;
+import org.jboss.jdf.example.ticketmonster.service.SeatAllocationService;
 
 
 /**
@@ -46,7 +46,7 @@ public class BookingService extends BaseEntityService<Booking> {
 
     @Inject
     private Event<Booking> bookingEvent;
-
+    
     public BookingService() {
         super(Booking.class);    //To change body of overridden methods use File | Settings | File Templates.
     }

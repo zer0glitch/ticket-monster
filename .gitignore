@@ -8,4 +8,4 @@ target
 *.ipr
 gwt-unitCache
 src/main/webapp/WEB-INF/deploy/
-src/main/webapp/TicketMonsterAdmin
+src/main/webapp/AdminConsole

@@ -7,7 +7,7 @@
    its own user interface for TicketMonster administrators.
 -->
 
-<module rename-to="TicketMonsterAdmin">
+<module rename-to="AdminConsole">
     <inherits name="org.jboss.errai.common.ErraiCommon"/>
     <inherits name="org.jboss.errai.bus.ErraiBus"/>
     <inherits name="org.jboss.errai.ioc.Container"/>

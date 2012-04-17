@@ -17,6 +17,7 @@
 package org.jboss.jdf.example.ticketmonster.admin.client.shared;
 
 import java.util.List;
+import java.util.Map;
 
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.jboss.jdf.example.ticketmonster.model.Show;
@@ -25,6 +26,7 @@ import org.jboss.jdf.example.ticketmonster.model.Show;
  * @author Christian Sadilek <csadilek@redhat.com>
  */
 @Remote
-public interface TicketMonsterAdminService {
-    public List<Show> listAllShows();
+public interface AdminService {
+    public List<Show> retrieveShows();
+    public Map<Long, Long> retrieveOccupiedCounts(); 
 }
