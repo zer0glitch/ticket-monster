@@ -25,7 +25,6 @@ import org.jboss.jdf.example.ticketmonster.model.Show;
  * @author Marius Bogoevici
  */
 @Path("/shows")
-@ApplicationScoped
 @Singleton
 public class ShowService extends BaseEntityService<Show> {
 

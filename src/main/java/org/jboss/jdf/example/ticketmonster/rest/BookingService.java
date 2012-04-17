@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.ejb.Stateful;
-import javax.enterprise.context.RequestScoped;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -33,20 +32,36 @@ import org.jboss.jdf.example.ticketmonster.service.SeatAllocationService;
 
 
 /**
+ * <p>
+ *     A JAX-RS endpoint for handling {@link Booking}s. Inherits the GET
+ *     methods from {@link BaseEntityService}, and implements additional REST methods.
+ * </p>
+ *
  * @author Marius Bogoevici
  */
 @Path("/bookings")
-@Stateful
-@RequestScoped
+/**
+ * <p>
+ *     This is a stateless service, so a single shared instance can be used in this case.
+ * </p>
+ */
+@Singleton
 public class BookingService extends BaseEntityService<Booking> {
 
     @Inject
     SeatAllocationService seatAllocationService;
 
     public BookingService() {
-        super(Booking.class);    //To change body of overridden methods use File | Settings | File Templates.
+        super(Booking.class);
     }
 
+    /**
+     * <p>
+     *     A method for deleting bookings.
+     * </p>
+     * @param id
+     * @return
+     */
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
     public Response deleteBooking(@PathParam("id") Long id) {
@@ -58,13 +73,26 @@ public class BookingService extends BaseEntityService<Booking> {
         return Response.ok().build();
     }
 
+    /**
+     * <p>
+     *     A method for creating new bookings.
+     * </p>
+     * @param bookingRequest
+     * @return
+     */
     @SuppressWarnings("unchecked")
     @POST
+    /**
+     * <p> Data is received in JSON format. For easy handling, it will be unmarshalled in the support
+     * {@link BookingRequest} class.
+     */
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createBooking(BookingRequest bookingRequest) {
         try {
+            // load the performance for which this request has been created
             Performance performance = getEntityManager().find(Performance.class, bookingRequest.getPerformance());
 
+            // identify the ticket price categories in this request
             Set<Long> priceCategoryIds = new HashSet<Long>();
             for (TicketRequest ticketRequest : bookingRequest.getTicketRequests()) {
                 if (priceCategoryIds.contains(ticketRequest.getPriceCategory())) {
@@ -72,17 +100,19 @@ public class BookingService extends BaseEntityService<Booking> {
                 }
                 priceCategoryIds.add(ticketRequest.getPriceCategory());
             }
-            List<TicketPriceCategory> ticketPrices = (List<TicketPriceCategory>) getEntityManager().createQuery("select p from TicketPriceCategory p where p.id in :ids").setParameter("ids", priceCategoryIds).getResultList();
+            // load the ticket price categories
+            List<TicketPriceCategory> ticketPriceCategories =
+                    (List<TicketPriceCategory>) getEntityManager().createQuery("select p from TicketPriceCategory p where p.id in :ids").setParameter("ids", priceCategoryIds).getResultList();
 
+            // organize price categories in a map indexed by their id
+            // we will need them later, and this provides a more efficient way of accessing them
             Map<Long, TicketPriceCategory> priceCategoriesById = new HashMap<Long, TicketPriceCategory>();
-
-            for (TicketPriceCategory loadedPriceCategory : ticketPrices) {
+            for (TicketPriceCategory loadedPriceCategory : ticketPriceCategories) {
                 priceCategoriesById.put(loadedPriceCategory.getId(), loadedPriceCategory);
             }
 
-            Booking booking = new Booking();
-            booking.setContactEmail(bookingRequest.getEmail());
-
+            // aggregate ticket requests by section
+            // we want to allocate ticket requests that belong to the same section contiguously
             Map<Section, Map<TicketCategory, TicketRequest>> ticketRequestsPerSection = new LinkedHashMap<Section, Map<TicketCategory, TicketRequest>>();
             for (TicketRequest ticketRequest : bookingRequest.getTicketRequests()) {
                 final TicketPriceCategory priceCategory = priceCategoriesById.get(ticketRequest.getPriceCategory());
@@ -92,13 +122,22 @@ public class BookingService extends BaseEntityService<Booking> {
                 ticketRequestsPerSection.get(priceCategory.getSection()).put(priceCategoriesById.get(ticketRequest.getPriceCategory()).getTicketCategory(), ticketRequest);
             }
 
+            // create a new booking and fill it with data
+            Booking booking = new Booking();
+            booking.setContactEmail(bookingRequest.getEmail());
+
+            // iterate sections for which we have requests
             for (Section section : ticketRequestsPerSection.keySet()) {
                 int totalTicketsRequestedPerSection = 0;
                 final Map<TicketCategory, TicketRequest> ticketRequestsByCategories = ticketRequestsPerSection.get(section);
+                // calculate the total quantity of tickets to be allocated in this section
                 for (TicketRequest ticketRequest : ticketRequestsByCategories.values()) {
                     totalTicketsRequestedPerSection += ticketRequest.getQuantity();
                 }
+                // try to allocate seats - if this fails, an exception will be thrown
                 List<Seat> seats = seatAllocationService.allocateSeats(section, performance, totalTicketsRequestedPerSection, true);
+                // allocation was successful, begin generating tickets
+                // associate each allocated seat with a ticket, assigning a price category to it
                 int seatCounter = 0;
                 for (TicketCategory ticketCategory : ticketRequestsByCategories.keySet()) {
                     final TicketRequest ticketRequest = ticketRequestsByCategories.get(ticketCategory);
@@ -111,6 +150,7 @@ public class BookingService extends BaseEntityService<Booking> {
                     seatCounter += ticketRequest.getQuantity();
                 }
             }
+            // everything went ok, now we can persist the booking
             booking.setPerformance(performance);
             booking.setCancellationCode("abc");
             getEntityManager().persist(booking);
@@ -130,60 +170,4 @@ public class BookingService extends BaseEntityService<Booking> {
         }
     }
 
-    public static class BookingRequest {
-
-        private List<TicketRequest> ticketRequests = new ArrayList<TicketRequest>();
-        private long performance;
-        private String email;
-
-        public List<TicketRequest> getTicketRequests() {
-            return ticketRequests;
-        }
-
-        public void setTicketRequests(List<TicketRequest> ticketRequests) {
-            this.ticketRequests = ticketRequests;
-        }
-
-        public long getPerformance() {
-            return performance;
-        }
-
-        public void setPerformance(long performance) {
-
-            this.performance = performance;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-    }
-
-
-    public static class TicketRequest {
-
-        private long priceCategory;
-
-        private int quantity;
-
-
-        public long getPriceCategory() {
-            return priceCategory;
-        }
-
-        public void setPriceCategory(long priceCategory) {
-            this.priceCategory = priceCategory;
-        }
-
-        public int getQuantity() {
-            return quantity;
-        }
-
-        public void setQuantity(int quantity) {
-            this.quantity = quantity;
-        }
-    }
 }
