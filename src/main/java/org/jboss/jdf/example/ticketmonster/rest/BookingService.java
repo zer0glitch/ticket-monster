@@ -49,6 +49,9 @@ public class BookingService extends BaseEntityService<Booking> {
         super(Booking.class);
     }
 
+    /**
+     * Delete a booking by id
+     */
     @DELETE
     @Path("/{id:[0-9][0-9]*}")
     public Response deleteBooking(@PathParam("id") Long id) {
@@ -60,6 +63,9 @@ public class BookingService extends BaseEntityService<Booking> {
         return Response.ok().build();
     }
 
+    /**
+     * Create a booking. Data is contained in the bookingRequest object
+     */
     @SuppressWarnings("unchecked")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
