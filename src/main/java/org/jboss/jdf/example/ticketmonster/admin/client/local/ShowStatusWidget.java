@@ -16,6 +16,7 @@
 
 package org.jboss.jdf.example.ticketmonster.admin.client.local;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,6 +28,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 /**
+ * A UI component to display the status of a {@link Show}.
+ * 
  * @author Christian Sadilek <csadilek@redhat.com>
  */
 public class ShowStatusWidget extends Composite {
@@ -36,12 +39,18 @@ public class ShowStatusWidget extends Composite {
     public ShowStatusWidget(Show show) {
         VerticalPanel widgetPanel = new VerticalPanel();
         widgetPanel.setStyleName("show-status");
-        widgetPanel.add(new Label(show.getEvent().getName() + " @ " + show.getVenue()));
         
+        Label showStatusHeader = new Label(show.getEvent().getName() + " @ " + show.getVenue());
+        showStatusHeader.setStyleName("show-status-header");
+        widgetPanel.add(showStatusHeader);
+        
+        // Add a performance status widget for each performance of the show
         for (Performance performance : show.getPerformances()) {
-            PerformanceStatusWidget psw = new PerformanceStatusWidget(performance);
-            performances.put(performance.getId(), psw);
-            widgetPanel.add(psw);
+            if (performance.getDate().getTime() > new Date().getTime()) {
+              PerformanceStatusWidget psw = new PerformanceStatusWidget(performance);
+              performances.put(performance.getId(), psw);
+              widgetPanel.add(psw);
+            }
         }
         
         initWidget(widgetPanel);
@@ -50,7 +59,7 @@ public class ShowStatusWidget extends Composite {
     public void updatePerformance(Performance performance) {
         PerformanceStatusWidget pw = performances.get(performance.getId());
         if (pw != null) {
-          pw.updateBookingStatus();
+            pw.updateBookingStatus();
         }
     }
 }

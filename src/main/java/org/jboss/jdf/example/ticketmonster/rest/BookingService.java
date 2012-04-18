@@ -23,6 +23,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.jboss.jdf.example.ticketmonster.admin.client.shared.qualifier.Cancelled;
+import org.jboss.jdf.example.ticketmonster.admin.client.shared.qualifier.Created;
 import org.jboss.jdf.example.ticketmonster.model.Booking;
 import org.jboss.jdf.example.ticketmonster.model.Performance;
 import org.jboss.jdf.example.ticketmonster.model.Seat;
@@ -44,8 +46,11 @@ public class BookingService extends BaseEntityService<Booking> {
     @Inject
     SeatAllocationService seatAllocationService;
 
-    @Inject
-    private Event<Booking> bookingEvent;
+    @Inject @Created
+    private Event<Booking> newBookingEvent;
+    
+    @Inject @Cancelled
+    private Event<Booking> cancelledBookingEvent;
     
     public BookingService() {
         super(Booking.class);    //To change body of overridden methods use File | Settings | File Templates.
@@ -59,6 +64,7 @@ public class BookingService extends BaseEntityService<Booking> {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         getEntityManager().remove(booking);
+        cancelledBookingEvent.fire(booking);
         return Response.ok().build();
     }
 
@@ -118,7 +124,7 @@ public class BookingService extends BaseEntityService<Booking> {
             booking.setPerformance(performance);
             booking.setCancellationCode("abc");
             getEntityManager().persist(booking);
-            bookingEvent.fire(booking);
+            newBookingEvent.fire(booking);
             return Response.ok().entity(booking).type(MediaType.APPLICATION_JSON_TYPE).build();
         } catch (ConstraintViolationException e) {
             Map<String, Object> errors = new HashMap<String, Object>();

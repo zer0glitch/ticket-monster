@@ -1,10 +1,7 @@
-/* Core styles for the page */
-body {
-	margin: 0;
-	padding: 0;
-	background-color: #EAECEE;
-	font-family: Verdana, sans-serif;
-	font-size: 0.9em;
+.booking-status-header {
+    padding-bottom: 17px;
+    margin: 18px 20px 0px 20px;
+    border-bottom: 1px solid #eeeeee;
 }
 
 .show-status {
@@ -17,4 +14,8 @@ body {
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
+}
+
+.show-status-header {
+	border-bottom: 2px solid #eeeeee;
 }

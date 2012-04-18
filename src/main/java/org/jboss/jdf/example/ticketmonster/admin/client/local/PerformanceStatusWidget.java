@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 
 /**
+ * A UI component to display the status of a {@link Performance}.
+ * 
  * @author Christian Sadilek <csadilek@redhat.com>
  */
 public class PerformanceStatusWidget extends Composite {
@@ -36,7 +38,7 @@ public class PerformanceStatusWidget extends Composite {
     private Label availablePercentLabel;
     
     private Performance performance;
-    private int soldTickets;
+    private long soldTickets;
     private int capacity;
 
     public PerformanceStatusWidget(Performance performance) {
@@ -62,20 +64,20 @@ public class PerformanceStatusWidget extends Composite {
     }
     
     public void updateBookingStatus() {
-      this.soldTickets = AdminConsole.getOccupiedCountForPerformance(performance);
-      setBookingStatus();
-      setProgress();
+        this.soldTickets = AdminConsole.getOccupiedCountForPerformance(performance);
+        setBookingStatus();
+        setProgress();
     }
     
     private void setProgress() {
         int soldPercent = Math.round((soldTickets / (float) capacity) * 100);
       
         if (soldPercentLabel != null) {
-          progressBar.remove(soldPercentLabel);
+            progressBar.remove(soldPercentLabel);
         }
         
         if (availablePercentLabel != null) {
-          progressBar.remove(availablePercentLabel);
+            progressBar.remove(availablePercentLabel);
         }
         
         soldPercentLabel = new Label();

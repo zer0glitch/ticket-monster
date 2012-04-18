@@ -23,10 +23,28 @@ import org.jboss.errai.bus.server.annotations.Remote;
 import org.jboss.jdf.example.ticketmonster.model.Show;
 
 /**
+ * A service used by the admin console for retrieving status information.
+ * 
+ * Errai's @Remote annotation indicates that the Service implementation can
+ * be used as an RPC endpoint and that this interface can be used on the
+ * client for type safe method invocation on this endpoint.
+ * 
  * @author Christian Sadilek <csadilek@redhat.com>
  */
 @Remote
 public interface AdminService {
+  
+    /**
+     * Lists all active {@link Show}s (shows with future performances). 
+     * 
+     * @return list of shows found.
+     */
     public List<Show> retrieveShows();
+    
+    /**
+     * Constructs a map of performance IDs to the total number of sold tickets.
+     * 
+     * @return map of performance IDs to the total number of sold tickets.
+     */
     public Map<Long, Long> retrieveOccupiedCounts(); 
 }
