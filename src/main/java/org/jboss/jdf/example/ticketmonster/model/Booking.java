@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jboss.errai.common.client.api.annotations.Portable;
 
 /**
  * <p>
@@ -33,7 +34,10 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Marius Bogoevici
  */
 @Entity
+@Portable
 public class Booking {
+
+    private static final long serialVersionUID = -1;
 
     /* Declaration of fields */
 

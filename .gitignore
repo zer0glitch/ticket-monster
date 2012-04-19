@@ -6,6 +6,6 @@ target
 *.iws
 *.iml
 *.ipr
-.errai
 gwt-unitCache
-rpcPolicyManifest
+src/main/webapp/WEB-INF/deploy/
+src/main/webapp/AdminConsole
