@@ -147,6 +147,10 @@
           <groupId>javax.annotation</groupId>
           <artifactId>jsr250-api</artifactId>
         </exclusion>
+        <exclusion>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -175,6 +179,12 @@
       <version>${mvel.version}</version>
     </dependency>
 
+    <dependency>
+        <groupId>org.javassist</groupId>
+        <artifactId>javassist</artifactId>
+        <version>3.16.1-GA</version>
+    </dependency>
+
     <!-- CDI Integration Modules -->
     <dependency>
       <groupId>org.jboss.errai</groupId>
@@ -195,9 +205,7 @@
       <version>${errai.version}</version>
         <exclusions>
         <exclusion>
-            <groupId>
-                org.jboss.weld.servlet
-            </groupId>
+            <groupId> org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet</artifactId>
         </exclusion>
         </exclusions>
