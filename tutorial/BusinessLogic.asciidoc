@@ -783,7 +783,7 @@ public class VenueService extends BaseEntityService<Venue> {
 
 We add the `@Path` annotation to the class, to indicate that this is a JAX-RS resource which can serve URLs starting with `/rest/venues`.
 
-We define this service (along with all the other JAX-RS services) as an EJB (see how simple is that in Java EE 6!) to benefit from automatic transaction enrollment. Since the service is fundamentally stateless, we take advantage of the new EJB 3.1 singleton feature.
+We define this service (along with all the other JAX-RS services) as an EJB (see how simple is that in Java EE 6!) to benefit from automatic transaction enrollment.
 
 Now, we can retrieve venues from URLs like `/rest/venues` or `rest/venues/1`.
 
