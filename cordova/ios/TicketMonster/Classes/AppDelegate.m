@@ -39,7 +39,7 @@
 + (void)initialize {
     // Set user agent
     NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:@"TicktetMonster Cordova Webview iOS", @"UserAgent", nil];
-    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
     [dictionary release];
 }
 

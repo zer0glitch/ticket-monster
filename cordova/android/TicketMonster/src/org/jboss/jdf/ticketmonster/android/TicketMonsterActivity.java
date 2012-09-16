@@ -3,6 +3,7 @@ package org.jboss.jdf.ticketmonster.android;
 import org.apache.cordova.DroidGap;
 
 import android.os.Bundle;
+import android.webkit.WebSettings;
 
 public class TicketMonsterActivity extends DroidGap {
 
@@ -17,7 +18,7 @@ public class TicketMonsterActivity extends DroidGap {
      super.init();
     
      WebSettings settings = this.appView.getSettings();
-     settings.setUserAgentString("TicketMonster Webview Android");
+     settings.setUserAgentString("TicketMonster Cordova Webview Android");
     }
 
 }
