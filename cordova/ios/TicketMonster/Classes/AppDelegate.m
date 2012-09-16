@@ -36,14 +36,21 @@
 
 @synthesize window, viewController;
 
++ (void)initialize {
+    // Set user agent
+    NSDictionary *dictionary = [[NSDictionary alloc] initWithObjectsAndKeys:@"TicktetMonster Cordova Webview iOS", @"UserAgent", nil];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:dictionnary];
+    [dictionary release];
+}
+
 - (id) init
-{	
+{
 	/** If you need to do any extra app-specific initialization, you can do it here
 	 *  -jm
 	 **/
-    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage]; 
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
-        
+
     [CDVURLProtocol registerURLProtocol];
     
     return [super init];
@@ -55,14 +62,14 @@
  * This is main kick off after the app inits, the views and Settings are setup here. (preferred - iOS4 and up)
  */
 - (BOOL) application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
-{    
+{
     NSURL* url = [launchOptions objectForKey:UIApplicationLaunchOptionsURLKey];
     NSString* invokeString = nil;
     
     if (url && [url isKindOfClass:[NSURL class]]) {
         invokeString = [url absoluteString];
 		NSLog(@"TicketMonster launchOptions = %@", url);
-    }    
+    }
     
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
     self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
@@ -73,7 +80,7 @@
     self.viewController = [[[MainViewController alloc] init] autorelease];
     self.viewController.useSplashScreen = YES;
     self.viewController.wwwFolderName = @"www";
-    self.viewController.startPage = @"index-ios.html";
+    self.viewController.startPage = @"index.html";
     self.viewController.invokeString = invokeString;
     self.viewController.view.frame = viewBounds;
     
@@ -93,7 +100,7 @@
                 break;
             }
         }
-    } 
+    }
     
     if (forceStartupRotation) {
         NSLog(@"supportedOrientations: %@", self.viewController.supportedOrientations);
@@ -111,20 +118,20 @@
 
 // this happens while we are running ( in the background, or from within our own app )
 // only valid if TicketMonster-Info.plist specifies a protocol to handle
-- (BOOL) application:(UIApplication*)application handleOpenURL:(NSURL*)url 
+- (BOOL) application:(UIApplication*)application handleOpenURL:(NSURL*)url
 {
-    if (!url) { 
-        return NO; 
+    if (!url) {
+        return NO;
     }
     
 	// calls into javascript global function 'handleOpenURL'
     NSString* jsString = [NSString stringWithFormat:@"handleOpenURL(\"%@\");", url];
     [self.viewController.webView stringByEvaluatingJavaScriptFromString:jsString];
     
-    // all plugins will get the notification, and their handlers will be called 
+    // all plugins will get the notification, and their handlers will be called
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:CDVPluginHandleOpenURLNotification object:url]];
     
-    return YES;    
+    return YES;
 }
 
 - (void) dealloc
