@@ -47,7 +47,7 @@ public class SeatAllocationService implements Serializable {
 													.setParameter("performanceId", performance.getId())
 													.setParameter("sectionId", section.getId())
 													.getSingleResult();
-        entityManager.lock(sectionAllocationStatus, LockModeType.PESSIMISTIC_WRITE);
+        entityManager.refresh(sectionAllocationStatus, LockModeType.PESSIMISTIC_WRITE);
         return sectionAllocationStatus;
     }
 }
