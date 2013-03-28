@@ -59,9 +59,9 @@ public class IdentityManagementTestCase extends AbstractSecurityTestCase {
         john.setLastName("The Monster");
         john.setEmail("john@ticketmonster.org");
         
-        this.identityManager.add(john);
+        super.identityManager.add(john);
 
-        john = this.identityManager.getUser(john.getLoginName());
+        john = super.identityManager.getUser(john.getLoginName());
         
         assertNotNull(john);
         assertEquals("John", john.getFirstName());
@@ -74,9 +74,9 @@ public class IdentityManagementTestCase extends AbstractSecurityTestCase {
     public void testCreateRole() throws Exception {
         Role administrator = new SimpleRole("Administrator");
         
-        this.identityManager.add(administrator);
+        super.identityManager.add(administrator);
         
-        assertNotNull(this.identityManager.getRole(administrator.getName()));
+        assertNotNull(super.identityManager.getRole(administrator.getName()));
     }
 
     @Test
@@ -84,47 +84,47 @@ public class IdentityManagementTestCase extends AbstractSecurityTestCase {
     public void testCreateGroup() throws Exception {
         Group administrators = new SimpleGroup("Administrators");
         
-        this.identityManager.add(administrators);
+        super.identityManager.add(administrators);
         
-        assertNotNull(this.identityManager.getGroup(administrators.getName()));
+        assertNotNull(super.identityManager.getGroup(administrators.getName()));
     }
 
     @Test
     @InSequence(4)
     public void testAssociateUserWithRole() throws Exception {
-        User john = this.identityManager.getUser("john");
-        Role administrator = this.identityManager.getRole("Administrator");
+        User john = super.identityManager.getUser("john");
+        Role administrator = super.identityManager.getRole("Administrator");
         
-        this.identityManager.grantRole(john, administrator);
+        super.identityManager.grantRole(john, administrator);
         
-        assertTrue(this.identityManager.hasRole(john, administrator));
+        assertTrue(super.identityManager.hasRole(john, administrator));
     }
 
     @Test
     @InSequence(5)
     public void testAssociateUserWithGroup() throws Exception {
-        User john = this.identityManager.getUser("john");
-        Group administrators = this.identityManager.getGroup("Administrators");
+        User john = super.identityManager.getUser("john");
+        Group administrators = super.identityManager.getGroup("Administrators");
         
-        this.identityManager.addToGroup(john, administrators);
+        super.identityManager.addToGroup(john, administrators);
         
-        assertTrue(this.identityManager.isMember(john, administrators));
+        assertTrue(super.identityManager.isMember(john, administrators));
     }
 
     @Test
     @InSequence(6)
     public void testAssociateUserWithGroupAndRole() throws Exception {
-        User john = this.identityManager.getUser("john");
+        User john = super.identityManager.getUser("john");
         Role manager = new SimpleRole("Manager");
         Group sales = new SimpleGroup("Sales");
         
-        this.identityManager.add(manager);
-        this.identityManager.add(sales);
+        super.identityManager.add(manager);
+        super.identityManager.add(sales);
         
         // john is now a Manager of the Sales group
-        this.identityManager.grantGroupRole(john, manager, sales);
+        super.identityManager.grantGroupRole(john, manager, sales);
         
-        assertTrue(this.identityManager.hasGroupRole(john, manager, sales));
+        assertTrue(super.identityManager.hasGroupRole(john, manager, sales));
     }
 
 }

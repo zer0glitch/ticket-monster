@@ -26,10 +26,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.inject.Inject;
+
 import org.jboss.arquillian.junit.InSequence;
 import org.junit.Assert;
 import org.junit.Test;
 import org.picketlink.Identity;
+import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.SimpleUser;
@@ -52,24 +55,27 @@ public class AuthenticationTestCase extends AbstractSecurityTestCase {
     private static final String USER_LOGIN_NAME = "john";
     private static final String USER_PASSWORD = "letmein";
 
+    @Inject
+    protected DefaultLoginCredentials credentials;
+    
     @Test
     @InSequence(1)
     public void testCreateUser() throws Exception {
         SimpleUser john = new SimpleUser(USER_LOGIN_NAME);
 
-        this.identityManager.add(john);
+        super.identityManager.add(john);
 
-        assertNotNull(this.identityManager.getUser(john.getLoginName()));
+        assertNotNull(super.identityManager.getUser(john.getLoginName()));
     }
 
     @Test
     @InSequence(2)
     public void testPopulateCredentials() throws Exception {
-        User john = this.identityManager.getUser(USER_LOGIN_NAME);
+        User john = super.identityManager.getUser(USER_LOGIN_NAME);
 
         assertNotNull(john);
 
-        this.identityManager.updateCredential(john, new Password(USER_PASSWORD));
+        super.identityManager.updateCredential(john, new Password(USER_PASSWORD));
     }
 
     @Test
@@ -78,11 +84,11 @@ public class AuthenticationTestCase extends AbstractSecurityTestCase {
         this.credentials.setUserId(USER_LOGIN_NAME);
         this.credentials.setCredential(new Password(USER_PASSWORD));
 
-        assertFalse(this.identity.isLoggedIn());
+        assertFalse(super.identity.isLoggedIn());
 
-        this.identity.login();
+        super.identity.login();
 
-        assertTrue(this.identity.isLoggedIn());
+        assertTrue(super.identity.isLoggedIn());
     }
 
     @Test
@@ -91,9 +97,9 @@ public class AuthenticationTestCase extends AbstractSecurityTestCase {
         this.credentials.setUserId(USER_LOGIN_NAME);
         this.credentials.setCredential(new Password("letmein2"));
 
-        this.identity.login();
+        super.identity.login();
 
-        Assert.assertFalse(this.identity.isLoggedIn());
+        Assert.assertFalse(super.identity.isLoggedIn());
     }
 
     @Test
@@ -102,13 +108,13 @@ public class AuthenticationTestCase extends AbstractSecurityTestCase {
         this.credentials.setUserId(USER_LOGIN_NAME);
         this.credentials.setCredential(new Password(USER_PASSWORD));
 
-        this.identity.login();
+        super.identity.login();
 
-        assertTrue(this.identity.isLoggedIn());
+        assertTrue(super.identity.isLoggedIn());
 
-        this.identity.logout();
+        super.identity.logout();
 
-        assertFalse(this.identity.isLoggedIn());
+        assertFalse(super.identity.isLoggedIn());
     }
 
 }

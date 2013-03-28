@@ -35,7 +35,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.picketlink.Identity;
-import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManager;
 
 /**
@@ -69,9 +68,6 @@ public abstract class AbstractSecurityTestCase {
     @Inject
     protected UserTransaction userTransaction;
     
-    @Inject
-    protected DefaultLoginCredentials credentials;
-
     @Before
     public void onInit() throws Exception {
         this.userTransaction.begin();
