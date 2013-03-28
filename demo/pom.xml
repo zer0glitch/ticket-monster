@@ -165,7 +165,23 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+		
+		<!-- PicketLink dependencies. They will provide all security capabilities for the application. -->
+		
+		<!-- PicketLink Core provides authentication, authorization and identity management services. -->
+		<dependency>
+			<groupId>org.picketlink</groupId>
+			<artifactId>picketlink-core-impl</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- PicketLink IDM Schema provides some built-in JPA entities to be used with the JPA Identity Store. -->
+		<dependency>
+			<groupId>org.picketlink</groupId>
+			<artifactId>picketlink-idm-schema</artifactId>
+			<version>3.0.0-SNAPSHOT</version>
+		</dependency>
+		
 
         <!-- The next set of dependencies are for Errai, which we use for 
             the TicketMonster booking monitor -->

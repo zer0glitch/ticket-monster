@@ -7,6 +7,8 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.picketlink.annotations.PicketLink;
+
 /**
  * This class uses CDI to alias Java EE resources, such as the persistence context, to CDI beans
  * 
@@ -25,21 +27,30 @@ public class Resources {
      * Alias the persistence context
      */
     // use @SuppressWarnings to tell IDE to ignore warnings about field not being referenced directly
-   @SuppressWarnings("unused")
-   @Produces
-   @PersistenceContext
-   private EntityManager em;
-   
-   /**
-    * Provider injectable loggers based around Java Util Logging.
-    * @param injectionPoint
-    * @return
-    */
-   @Produces
-   public Logger produceLog(InjectionPoint injectionPoint) {
-      return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
-   }
- 
-   
-   
+    @SuppressWarnings("unused")
+    @Produces
+    @PersistenceContext(unitName = "primary")
+    private EntityManager em;
+
+    /**
+     * <p>
+     * Produces a {@link EntityManager} using the qualifier {@link PicketLink} that will be used by the PicketLink IDM.
+     * </p>
+     */
+    @Produces
+    @PicketLink
+    @PersistenceContext(unitName = "picketlink-pu")
+    private EntityManager picketLinkEntityManager;
+
+    /**
+     * Provider injectable loggers based around Java Util Logging.
+     * 
+     * @param injectionPoint
+     * @return
+     */
+    @Produces
+    public Logger produceLog(InjectionPoint injectionPoint) {
+        return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
+    }
+
 }
