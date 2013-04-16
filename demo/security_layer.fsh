@@ -18,8 +18,8 @@ scaffold setup;
 set ACCEPT_DEFAULTS false;
 
 if ( SHELL.promptBoolean("Apply security changes described in tutorial?") ) {
-    echo Applying manual changes described in tutorial based on security_layer.patch;
-    git apply -v --ignore-whitespace --ignore-space-change patches/security_layer.patch;
+    echo Applying manual changes described in tutorial based on security_layer_tests.patch;
+    git apply -v --ignore-whitespace --ignore-space-change patches/security_layer_tests.patch;
 }
 
 if ( SHELL.promptBoolean("Deploy to JBoss AS 7?") ) {
