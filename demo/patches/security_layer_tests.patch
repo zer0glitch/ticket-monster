@@ -518,26 +518,6 @@ index effbe09..93fce38 100644
 +	</persistence-unit>
 +
  </persistence>
-diff --git a/demo/src/test/resources/arquillian.xml b/demo/src/test/resources/arquillian.xml
-index 24fabf8..9216114 100644
---- a/demo/src/test/resources/arquillian.xml
-+++ b/demo/src/test/resources/arquillian.xml
-@@ -26,7 +26,7 @@
-    <container qualifier="jboss" default="true">
-       <!-- If you want to use the JBOSS_HOME environment variable, just delete the jbossHome property -->
-       <configuration>
--         <property name="jbossHome">/path/to/jboss/as</property>
-+         <property name="jbossHome">/pedroigor/java/container/jboss/eap/as/jboss-eap-6.1</property>
-       </configuration>
-    </container>
- 
---
----
- .../test/security/AbstractSecurityTestCase.java    |  4 ---
- .../test/security/AuthenticationTestCase.java      | 32 ++++++++++--------
- .../test/security/IdentityManagementTestCase.java  | 38 +++++++++++-----------
- 3 files changed, 38 insertions(+), 36 deletions(-)
-
 diff --git a/demo/src/test/java/org/jboss/jdf/ticketmonster/test/security/AbstractSecurityTestCase.java b/demo/src/test/java/org/jboss/jdf/ticketmonster/test/security/AbstractSecurityTestCase.java
 index 902bea1..e95cf80 100644
 --- a/demo/src/test/java/org/jboss/jdf/ticketmonster/test/security/AbstractSecurityTestCase.java

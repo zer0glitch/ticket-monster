@@ -9,10 +9,6 @@ clear;
 @/* This means less typing. If a script is automated, or is not meant to be interactive, use this command */; 
 set ACCEPT_DEFAULTS true;
 
-@/* Enable scaffolding from entities */;
-
-scaffold setup;
-
 @/* Ask the user whether they want to patch in the changes described in the tutorial */;
 
 set ACCEPT_DEFAULTS false;
@@ -31,5 +27,3 @@ if ( SHELL.promptBoolean("Deploy to JBoss AS 7?") ) {
 } else {
     build clean package;
 }
-
-
