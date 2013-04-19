@@ -32,9 +32,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.jdf.example.ticketmonster.security.model.SecurityContext;
 import org.picketlink.Identity;
 import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
 
 /**
@@ -64,6 +64,12 @@ public class UserInfoService implements Serializable {
         }
         
         return context;
+    }
+    
+    public boolean hasRole(String roleName) {
+        Role role = this.identityManager.getRole(roleName);
+        
+        return role != null && this.identityManager.hasRole(this.identity.getUser(), role);
     }
     
     public boolean isAdmin() {

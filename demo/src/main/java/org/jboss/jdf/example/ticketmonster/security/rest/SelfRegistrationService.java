@@ -29,7 +29,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.jdf.example.ticketmonster.security.model.SecurityContext;
 import org.picketlink.idm.IdentityManagementException;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
@@ -97,13 +96,19 @@ public class SelfRegistrationService {
 
         this.identityManager.updateCredential(newUser, password);
 
-        Role userRole = new SimpleRole("User");
+        Role userRole = this.identityManager.getRole("User");
+        
+        if (userRole == null) {
+            userRole = new SimpleRole("User");
+            this.identityManager.add(userRole);
+        }
 
-        this.identityManager.add(userRole);
+        Group userGroup = this.identityManager.getGroup("Users");
 
-        Group userGroup = new SimpleGroup("Users");
-
-        this.identityManager.add(userGroup);
+        if (userGroup == null) {
+            userGroup = new SimpleGroup("Users");
+            this.identityManager.add(userGroup);
+        }
 
         this.identityManager.grantRole(newUser, userRole);
         this.identityManager.addToGroup(newUser, userGroup);

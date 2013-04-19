@@ -4,6 +4,22 @@
    Note that most TicketMonster configuration is done by annotation-driven configs.
    The contents of this file just configure the Errai-based Administration Console.
  -->
+  <filter>
+  	<filter-name>RoleBasedAuthorizationFilter</filter-name>
+  	<filter-class>org.jboss.jdf.example.ticketmonster.security.RoleBasedAuthorizationFilter</filter-class>
+  	<init-param>
+  		<param-name>loginUri</param-name>
+  		<param-value>/#login</param-value>
+  	</init-param>
+  	<init-param>
+  		<param-name>protectedResources</param-name>
+  		<param-value>/admin/*: Administrator</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>RoleBasedAuthorizationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
   <servlet>
     <servlet-name>ErraiServlet</servlet-name>
     <servlet-class>org.jboss.errai.bus.server.servlet.DefaultBlockingServlet</servlet-class>

@@ -7,10 +7,17 @@
 	<title>#{empty pageTitle ? '{#pageTitle}' : pageTitle}</title>
 	<link rel="icon" href="#{resource['favicon.ico']}" />
     <link href='http://fonts.googleapis.com/css?family=Rokkitt' rel='stylesheet' type='text/css'/>
+    <h:outputScript name="js/libs/jquery-1.7.1.js" />
+    <h:outputScript name="js/app/security.js" />
 	<h:outputStylesheet name="bootstrap.css" />
 	<h:outputStylesheet name="forge-style.css" />
     <h:outputStylesheet name="css/screen.css" />
     <h:outputStylesheet name="css/custom-forge.css" />
+    
+    <script>
+		var baseUrl = '#{request.contextPath}';
+    </script>
+    
 </h:head>
 
 <h:body>
@@ -42,7 +49,7 @@
                             </ui:fragment>
                             <ui:fragment rendered="#{identity.loggedIn}">
                         		<li><a href="#">| User: <span id="userLoggedInName" style="color:white;">#{identity.user.firstName} #{identity.user.lastName}</span></a></li>
-                        		<li><a href="logout">| Logout |</a></li>
+                        		<li><a href="#" onclick="performLogout();">| Logout |</a></li>
                         	</ui:fragment>
                         </ul>
                 </div>

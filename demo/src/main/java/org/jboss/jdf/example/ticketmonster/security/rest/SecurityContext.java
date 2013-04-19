@@ -20,39 +20,44 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.jboss.jdf.example.ticketmonster.security;
+package org.jboss.jdf.example.ticketmonster.security.rest;
 
-import java.lang.annotation.Annotation;
-
-import javax.enterprise.context.ApplicationScoped;
-
-import org.picketlink.Identity;
-import org.picketlink.deltaspike.Secures;
+import org.picketlink.idm.model.User;
 
 /**
- * <p>
- * Provides some authorization services for the application like custom {@link Annotation} to secure proteced resources.
- * </p>
- * 
  * @author Pedro Silva
- * 
+ *
  */
-@ApplicationScoped
-public class AuthorizationManager {
+public class SecurityContext {
 
-    /**
-     * <p>
-     * Check if a method or type annotated with the {@link UserLoggedIn} is being access by an authenticated user. This method
-     * is called before the annotated method is called.
-     * </p>
-     * 
-     * @param identity
-     * @return
-     */
-    @Secures
-    @UserLoggedIn
-    public boolean isUserLoggedIn(Identity identity) {
-        return identity.isLoggedIn();
+    private User user;
+    
+    private String message;
+
+    private boolean administrator;
+
+    public User getUser() {
+        return user;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setAdministrator(boolean admin) {
+        this.administrator = admin;
+    }
+    
+    public boolean isAdministrator() {
+        return this.administrator;
+    }
+    
 }

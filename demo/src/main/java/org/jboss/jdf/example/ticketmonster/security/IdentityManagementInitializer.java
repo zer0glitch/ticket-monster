@@ -37,7 +37,12 @@ import org.picketlink.idm.model.SimpleUser;
 import org.picketlink.idm.model.User;
 
 /**
- *
+ * <p>
+ * Performs some initialization during the startup in order to populate the underlying identity stores with some data.
+ * </p>
+ * 
+ * @author Pedro Silva
+ * 
  */
 @Singleton
 @Startup
@@ -45,29 +50,36 @@ public class IdentityManagementInitializer {
 
     @Inject
     private IdentityManager identityManager;
-    
+
     @PostConstruct
     public void initialize() {
         User admin = new SimpleUser("admin@ticketmonster.org");
-        
+
         admin.setFirstName("Almight");
         admin.setLastName("Administrator");
         
+        // let's store the admin user
         this.identityManager.add(admin);
-        
+
         Password password = new Password("letmein!");
-        
+
+        // updates the admin password
         this.identityManager.updateCredential(admin, password);
-        
+
         Role adminRole = new SimpleRole("Administrator");
-        
+
+        // stores the admin role
         this.identityManager.add(adminRole);
-        
+
         Group adminGroup = new SimpleGroup("Administrators");
-        
+
+        // stores the admin group
         this.identityManager.add(adminGroup);
         
+        // grants to the admin user the admin role
         this.identityManager.grantRole(admin, adminRole);
+        
+        // add the admin user to the admin group
         this.identityManager.addToGroup(admin, adminGroup);
     }
 }

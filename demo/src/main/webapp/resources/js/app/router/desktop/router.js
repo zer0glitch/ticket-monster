@@ -49,14 +49,6 @@ define("router", [
        utilities.applyTemplate($('body'), MainTemplate);
     });
 
-    $.ajaxSetup({
-    	error : function(xhr, textStatus, errorThrown) {
-			if (xhr.status == 401) {
-				window.location = config.baseUrl + "#login";
-			}
-		}
-    });
-
     /**
      * The Router class contains all the routes within the application - 
      * i.e. URLs and the actions that will be taken as a result.
@@ -100,18 +92,7 @@ define("router", [
             utilities.viewManager.showView(new LoginView({el:$("#content")}));
         },
         logout:function () {
-        	$.ajax({url: (config.baseUrl + "rest/logout"),
-    			type:"POST",
-    			dataType:"json",
-    			contentType:"application/json",
-    			success: function(context) {
-    				$("#userSection").hide();
-    				$("#logoutSection").hide();
-    				$("#adminSection").hide();
-    				$("#signInSection").show();
-    				window.location = config.baseUrl; 
-    			}}
-    		);
+        	performLogout();
         },
         home:function () {
         	utilities.viewManager.showView(new HomeView({el:$("#content")}));
