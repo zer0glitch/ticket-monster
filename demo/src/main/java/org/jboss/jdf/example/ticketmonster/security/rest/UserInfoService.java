@@ -34,7 +34,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.picketlink.Identity;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.User;
 
 /**
@@ -66,12 +65,6 @@ public class UserInfoService implements Serializable {
         return context;
     }
     
-    public boolean hasRole(String roleName) {
-        Role role = this.identityManager.getRole(roleName);
-        
-        return role != null && this.identityManager.hasRole(this.identity.getUser(), role);
-    }
-    
     public boolean isAdmin() {
         if (this.identity.isLoggedIn()) {
             return this.identityManager.hasRole(this.identity.getUser(), this.identityManager.getRole("Administrator"));
@@ -79,12 +72,5 @@ public class UserInfoService implements Serializable {
         
         return false;
     }
-
-    public void logout() {
-        this.identity.logout();
-    }
-
-    public boolean isLoggedIn() {
-        return this.identity.isLoggedIn();
-    }
+    
 }

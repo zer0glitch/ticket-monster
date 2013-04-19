@@ -39,11 +39,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.jboss.jdf.example.ticketmonster.security.rest.UserInfoService;
+import org.picketlink.Identity;
 import org.picketlink.deltaspike.security.api.authorization.AccessDeniedException;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Role;
 
 /**
- * <p>This filter intercepts all requests in order to apply some security constraints.</p>
+ * <p>A RBAC {@link Filter} that can be used to protected web resources based on a simple role mapping.</p>
+ * <p>This filter accepts two params:</p>
+ * <ul>
+ *  <li>protectedResources: A string with a list of url patterns and roles for access contro. Eg.: /admin/*: Administrator!AnotherRole, /someUri:SomeRole</li>
+ *  <li>loginUri: The login page URI.</li>
+ * </ul>
  * 
  * @author Pedro Silva
  *
@@ -53,7 +60,10 @@ public class RoleBasedAuthorizationFilter implements Filter {
     private static final String ANY_RESOURCE_PATTERN = "*";
 
     @Inject
-    private Instance<UserInfoService> userService;
+    private Instance<Identity> identity;
+    
+    @Inject
+    private Instance<IdentityManager> identityManager;
 
     private Map<String, String[]> urlPatternRoles = new HashMap<String, String[]>();
 
@@ -92,13 +102,19 @@ public class RoleBasedAuthorizationFilter implements Filter {
             
             for (Entry<String, String[]> entry : entrySet) {
                 if (matches(entry.getKey(), requestURI)) {
-                    if (!getUserService().isLoggedIn()) {
+                    if (!getIdentity().isLoggedIn()) {
                         httpResponse.sendRedirect(httpRequest.getContextPath() + this.loginUri);                    
                     } else {
                         String[] roles = entry.getValue();
                         
-                        for (String role : roles) {
-                            if (!this.userService.get().hasRole(role.trim())) {
+                        for (String roleName : roles) {
+                            Role role = getIdentityManager().getRole(roleName.trim());
+                            
+                            if (role == null) {
+                                throw new IllegalStateException("The specified role does not exists [" + role + "]. Check your configuration.");
+                            }
+                            
+                            if (!getIdentityManager().hasRole(getIdentity().getUser(), role)) {
                                 handleAccessDeniedError(httpResponse);
                             }
                         }
@@ -118,32 +134,36 @@ public class RoleBasedAuthorizationFilter implements Filter {
         }
     }
 
-    private UserInfoService getUserService() {
-        return this.userService.get();
+    @Override
+    public void destroy() {
+    }
+
+    private Identity getIdentity() {
+        return this.identity.get();
+    }
+    
+    private IdentityManager getIdentityManager() {
+        return this.identityManager.get();
     }
 
     private void handleAccessDeniedError(HttpServletResponse httpResponse) throws IOException {
-        if (!getUserService().isLoggedIn()) {
+        if (!getIdentity().isLoggedIn()) {
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
         } else {
             httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN);
         }
     }
 
-    @Override
-    public void destroy() {
-    }
-
     /**
      * <p>
-     * Checks if the provided URI matches the pattern defined for this resource.
+     * Checks if the provided URI matches the specified pattern.
      * </p>
      *
      * @param uri
      * @param pattern 
      * @return
      */
-    public boolean matches(String pattern, String uri) {
+    private boolean matches(String pattern, String uri) {
         if (pattern.equals(ANY_RESOURCE_PATTERN)) {
             return true;
         }
