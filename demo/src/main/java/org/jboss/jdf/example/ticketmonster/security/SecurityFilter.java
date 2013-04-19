@@ -36,7 +36,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.picketlink.Identity;
+import org.jboss.jdf.example.ticketmonster.security.rest.UserInfoService;
 import org.picketlink.deltaspike.security.api.authorization.AccessDeniedException;
 
 /**
@@ -47,8 +47,8 @@ import org.picketlink.deltaspike.security.api.authorization.AccessDeniedExceptio
 public class SecurityFilter implements Filter {
 
     @Inject
-    private Instance<Identity> identity;
-    
+    private Instance<UserInfoService> identity;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         
@@ -66,9 +66,15 @@ public class SecurityFilter implements Filter {
             if (requestURI.contains("logout") && !requestURI.contains("rest")) {
                 this.identity.get().logout();
                 httpResponse.sendRedirect(httpRequest.getContextPath());
-            } else if (requestURI.contains("/admin/") && !this.identity.get().isLoggedIn()) {
-                httpResponse.sendRedirect(httpRequest.getContextPath() + "/#login");
-            } else {
+            } else if (requestURI.contains("/admin/")) {
+                if (!this.identity.get().isLoggedIn()) {
+                    httpResponse.sendRedirect(httpRequest.getContextPath() + "/#login");                    
+                } else if (!this.identity.get().isAdmin()) {
+                    handleAccessDeniedError(httpResponse);
+                } 
+            }
+            
+            if (!httpResponse.isCommitted()) {
                 chain.doFilter(httpRequest, httpResponse);
             }
         } catch (AccessDeniedException ade) {

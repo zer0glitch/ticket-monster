@@ -73,4 +73,12 @@ public class UserInfoService implements Serializable {
         
         return false;
     }
+
+    public void logout() {
+        this.identity.logout();
+    }
+
+    public boolean isLoggedIn() {
+        return this.identity.isLoggedIn();
+    }
 }
