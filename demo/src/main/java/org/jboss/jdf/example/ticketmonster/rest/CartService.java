@@ -28,6 +28,7 @@ import org.jboss.jdf.example.ticketmonster.model.SeatAllocation;
 import org.jboss.jdf.example.ticketmonster.model.Ticket;
 import org.jboss.jdf.example.ticketmonster.model.TicketPrice;
 import org.jboss.jdf.example.ticketmonster.monitor.client.shared.qualifier.Created;
+import org.jboss.jdf.example.ticketmonster.security.UserLoggedIn;
 import org.jboss.jdf.example.ticketmonster.service.AllocatedSeats;
 import org.jboss.jdf.example.ticketmonster.service.CartStore;
 import org.jboss.jdf.example.ticketmonster.service.SeatAllocationService;
@@ -58,8 +59,7 @@ public class CartService {
 
     @Inject @Created
     private javax.enterprise.event.Event<Booking> newBookingEvent;
-
-
+    
     /**
      * Creates a new cart for a given performance, passed in as a JSON document.
      *
@@ -67,6 +67,7 @@ public class CartService {
      * @return
      */
     @POST
+    @UserLoggedIn
     public Cart openCart(Map<String, String> data) {
         Cart cart = Cart.initialize();
         cart.setPerformance(entityManager.find(Performance.class,
@@ -83,6 +84,7 @@ public class CartService {
      */
     @GET
     @Path("/{id}")
+    @UserLoggedIn
     public Cart getCart(String id) {
       return cartStore.getCart(id);
     }
@@ -98,6 +100,7 @@ public class CartService {
     @POST
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @UserLoggedIn
     public Cart addTicketRequest(@PathParam("id") String id, TicketReservationRequest... ticketRequests){
         Cart cart = cartStore.getCart(id);
 
@@ -138,6 +141,7 @@ public class CartService {
      */
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}/checkout")
+    @UserLoggedIn
     public Response createBookingFromCart(@PathParam("id") String cartId, Map<String, String> data) {
         try {
             // identify the ticket price categories in this request

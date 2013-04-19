@@ -39,7 +39,7 @@ public class Resources {
      */
     @Produces
     @PicketLink
-    @PersistenceContext(unitName = "picketlink-pu")
+    @PersistenceContext(unitName = "primary")
     private EntityManager picketLinkEntityManager;
 
     /**

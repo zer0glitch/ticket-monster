@@ -1,4 +1,4 @@
-define(['order!underscore', 'order!backbone'], function (_) {
+define(['order!underscore', 'order!backbone', 'configuration'], function (_, config) {
 
     var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     var monthNames = ["January", "February", "March", "April", "May", "June",
@@ -71,6 +71,23 @@ define(['order!underscore', 'order!backbone'], function (_) {
                     this.currentView.close();
                 }
                 this.currentView = view;
+            	$.ajax({url: ("rest/userinfo"),
+            		type:"POST",
+            		dataType:"json",
+            		contentType:"application/json",
+            		success: function(context) {
+            			if (context.user) {
+            				$("#signInSection").hide();
+            				$("#userLoggedInName").empty().append(context.user.firstName + " " + context.user.lastName);
+            				$("#userSection").show(); 
+            				$("#logoutSection").show();
+            				
+            				if (context.administrator) {
+            					$("#adminSection").show();
+            				}
+            			}
+            		}}
+            	);
                 return this.currentView.render();
             }
         },
