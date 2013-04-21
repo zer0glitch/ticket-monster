@@ -57,13 +57,9 @@ public class LoginService {
             this.identity.login();
         }
         
-        User authenticatedUser = null;
-        
         if (this.identity.isLoggedIn()) {
-            authenticatedUser = (User) this.identity.getUser();
+            context.setUser((User) this.identity.getUser());
         }
-        
-        context.setUser(authenticatedUser);
         
         return context;
     }
