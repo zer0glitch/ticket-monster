@@ -1,3 +1,11 @@
+$.ajaxSetup({
+	error : function(xhr, textStatus, errorThrown) {
+		if (xhr.status == 401) {
+			window.location = "#login";
+		}
+	}
+});
+
 function performLogin() {
 	var username = $("#userName");
 	var password = $("#password");

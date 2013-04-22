@@ -30,8 +30,6 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import javax.inject.Qualifier;
-
 import org.picketlink.deltaspike.SecurityBindingType;
 
 /**
@@ -44,7 +42,6 @@ import org.picketlink.deltaspike.SecurityBindingType;
 @Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
 @SecurityBindingType
 @Documented
-@Qualifier
 public @interface UserLoggedIn {
 
 }

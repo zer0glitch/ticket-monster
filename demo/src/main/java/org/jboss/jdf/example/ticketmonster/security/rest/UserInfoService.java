@@ -32,8 +32,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.jboss.jdf.example.ticketmonster.security.AuthorizationManager;
 import org.picketlink.Identity;
-import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.User;
 
 /**
@@ -50,7 +50,7 @@ public class UserInfoService implements Serializable {
     private Identity identity;
     
     @Inject
-    private IdentityManager identityManager;
+    private AuthorizationManager authorizationManager;
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -59,18 +59,10 @@ public class UserInfoService implements Serializable {
         
         if (this.identity.isLoggedIn()) {
             context.setUser((User) this.identity.getUser());
-            context.setAdministrator(isAdmin());
+            context.setAdministrator(this.authorizationManager.isAdmin());
         }
         
         return context;
-    }
-    
-    public boolean isAdmin() {
-        if (this.identity.isLoggedIn()) {
-            return this.identityManager.hasRole(this.identity.getUser(), this.identityManager.getRole("Administrator"));
-        }
-        
-        return false;
     }
     
 }

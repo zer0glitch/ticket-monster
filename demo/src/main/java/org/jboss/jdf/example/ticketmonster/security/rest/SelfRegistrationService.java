@@ -75,15 +75,6 @@ public class SelfRegistrationService {
         return securityContext;
     }
 
-    private SecurityContext performSilentAuthentication(RegistrationRequest request) {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-
-        authenticationRequest.setUsername(request.getEmail());
-        authenticationRequest.setPassword(request.getPassword());
-
-        return this.loginService.login(authenticationRequest);
-    }
-
     private void performRegistration(RegistrationRequest request) {
         User newUser = new SimpleUser(request.getEmail());
 
@@ -112,5 +103,14 @@ public class SelfRegistrationService {
 
         this.identityManager.grantRole(newUser, userRole);
         this.identityManager.addToGroup(newUser, userGroup);
+    }
+    
+    private SecurityContext performSilentAuthentication(RegistrationRequest request) {
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+
+        authenticationRequest.setUsername(request.getEmail());
+        authenticationRequest.setPassword(request.getPassword());
+
+        return this.loginService.login(authenticationRequest);
     }
 }

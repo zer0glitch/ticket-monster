@@ -21,6 +21,8 @@
 			find it in the source at src/main/webapp/WEB-INF/ticket-monster-ds.xml -->
 		<jta-data-source>java:jboss/datasources/ticket-monsterDS</jta-data-source>
 
+		<!-- All those entity classes are provided by the picketlink-idm-schema module. -->
+		
 		<class>org.picketlink.idm.jpa.schema.IdentityObject</class>
 		<class>org.picketlink.idm.jpa.schema.PartitionObject</class>
 		<class>org.picketlink.idm.jpa.schema.RelationshipObject</class>

@@ -43,7 +43,7 @@
                             <li><h:outputLink
                                     value="#{request.contextPath}/booking-monitor.html"><h:outputText
                                     value="Monitor"/></h:outputLink></li>
-                            <ui:fragment rendered="#{userInfoService.admin}">
+                            <ui:fragment rendered="#{authorizationManager.admin}">
                             <li><h:outputLink value="#{request.contextPath}/admin"><h:outputText
                                     value="Administration"/></h:outputLink></li>
                             </ui:fragment>

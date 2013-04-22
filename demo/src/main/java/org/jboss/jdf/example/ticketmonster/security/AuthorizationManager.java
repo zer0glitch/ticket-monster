@@ -25,9 +25,13 @@ package org.jboss.jdf.example.ticketmonster.security;
 import java.lang.annotation.Annotation;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Instance;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.picketlink.Identity;
 import org.picketlink.deltaspike.Secures;
+import org.picketlink.idm.IdentityManager;
 
 /**
  * <p>
@@ -37,8 +41,15 @@ import org.picketlink.deltaspike.Secures;
  * @author Pedro Silva
  * 
  */
+@Named
 @ApplicationScoped
 public class AuthorizationManager {
+
+    @Inject
+    private Instance<Identity> identity;
+
+    @Inject
+    private Instance<IdentityManager> identityManager;
 
     /**
      * <p>
@@ -55,4 +66,15 @@ public class AuthorizationManager {
         return identity.isLoggedIn();
     }
 
+    public boolean isAdmin() {
+        Identity identity = this.identity.get();
+        
+        if (isUserLoggedIn(identity)) {
+            IdentityManager identityManager = this.identityManager.get();
+            
+            return identityManager.hasRole(identity.getUser(), identityManager.getRole("Administrator"));
+        }
+        
+        return false;
+    }
 }
