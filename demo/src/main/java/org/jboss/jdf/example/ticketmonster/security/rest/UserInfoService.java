@@ -22,9 +22,7 @@
 
 package org.jboss.jdf.example.ticketmonster.security.rest;
 
-import java.io.Serializable;
-
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.POST;
@@ -41,11 +39,9 @@ import org.picketlink.idm.model.User;
  */
 @Named
 @Path ("/userinfo")
-@SessionScoped
-public class UserInfoService implements Serializable {
+@RequestScoped
+public class UserInfoService {
 
-    private static final long serialVersionUID = -5768792621245392562L;
-    
     @Inject
     private Identity identity;
     

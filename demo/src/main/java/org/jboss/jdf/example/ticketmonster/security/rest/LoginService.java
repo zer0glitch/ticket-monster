@@ -49,7 +49,7 @@ public class LoginService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public SecurityResponse login(DefaultLoginCredentials request) {
-        SecurityResponse context = new SecurityResponse();
+        SecurityResponse response = new SecurityResponse();
         
         if (!this.identity.isLoggedIn()) {
             this.credentials.setUserId(request.getUserId());
@@ -58,9 +58,9 @@ public class LoginService {
         }
         
         if (this.identity.isLoggedIn()) {
-            context.setUser((User) this.identity.getUser());
+            response.setUser((User) this.identity.getUser());
         }
         
-        return context;
+        return response;
     }
 }
