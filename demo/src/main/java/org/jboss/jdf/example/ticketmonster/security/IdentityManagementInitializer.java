@@ -81,6 +81,14 @@ public class IdentityManagementInitializer {
         
         // add the admin user to the admin group
         this.identityManager.addToGroup(admin, adminGroup);
+        
+        Role userRole = new SimpleRole("User");
+        
+        this.identityManager.add(userRole);
+        
+        Group usersGroup = new SimpleGroup("Users");
+        
+        this.identityManager.add(usersGroup);
     }
     
 }

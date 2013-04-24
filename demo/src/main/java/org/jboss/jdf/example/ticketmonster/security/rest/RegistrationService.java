@@ -36,8 +36,6 @@ import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.Group;
 import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.SimpleGroup;
-import org.picketlink.idm.model.SimpleRole;
 import org.picketlink.idm.model.SimpleUser;
 import org.picketlink.idm.model.User;
 
@@ -90,20 +88,11 @@ public class RegistrationService {
         this.identityManager.updateCredential(newUser, password);
 
         Role userRole = this.identityManager.getRole("User");
-        
-        if (userRole == null) {
-            userRole = new SimpleRole("User");
-            this.identityManager.add(userRole);
-        }
-
-        Group userGroup = this.identityManager.getGroup("Users");
-
-        if (userGroup == null) {
-            userGroup = new SimpleGroup("Users");
-            this.identityManager.add(userGroup);
-        }
 
         this.identityManager.grantRole(newUser, userRole);
+        
+        Group userGroup = this.identityManager.getGroup("Users");
+        
         this.identityManager.addToGroup(newUser, userGroup);
     }
     
