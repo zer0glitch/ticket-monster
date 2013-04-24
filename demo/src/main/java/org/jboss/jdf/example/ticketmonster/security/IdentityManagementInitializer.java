@@ -82,4 +82,5 @@ public class IdentityManagementInitializer {
         // add the admin user to the admin group
         this.identityManager.addToGroup(admin, adminGroup);
     }
+    
 }

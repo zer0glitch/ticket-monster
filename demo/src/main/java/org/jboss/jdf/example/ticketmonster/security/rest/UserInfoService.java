@@ -29,6 +29,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.jdf.example.ticketmonster.security.AuthorizationManager;
 import org.picketlink.Identity;
@@ -50,15 +51,15 @@ public class UserInfoService {
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public SecurityResponse info() {
-        SecurityResponse context = new SecurityResponse();
+    public Response info() {
+        SecurityResponse response = new SecurityResponse();
         
         if (this.identity.isLoggedIn()) {
-            context.setUser((User) this.identity.getUser());
-            context.setAdministrator(this.authorizationManager.isAdmin());
+            response.setUser((User) this.identity.getUser());
+            response.setAdministrator(this.authorizationManager.isAdmin());
         }
         
-        return context;
+        return Response.ok().entity(response).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
     
 }

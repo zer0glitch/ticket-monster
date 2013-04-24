@@ -28,6 +28,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManagementException;
@@ -45,7 +46,7 @@ import org.picketlink.idm.model.User;
  */
 @Path("/registration")
 @Stateless
-public class SelfRegistrationService {
+public class RegistrationService {
 
     @Inject
     private IdentityManager identityManager;
@@ -55,25 +56,25 @@ public class SelfRegistrationService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public SecurityResponse register(RegistrationRequest request) {
-        SecurityResponse securityContext = new SecurityResponse();
+    public Response register(RegistrationRequest request) {
+        SecurityResponse response = new SecurityResponse();
 
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
-            securityContext.setMessage("Password mismatch.");
+            response.setMessage("Password mismatch.");
         } else {
             try {
                 if (this.identityManager.getUser(request.getEmail()) == null) {
                     performRegistration(request);
-                    securityContext = performSilentAuthentication(request);
+                    return performSilentAuthentication(request);
                 } else {
-                    securityContext.setMessage("This username is already in use. Try another one.");
+                    response.setMessage("This username is already in use. Try another one.");
                 }
             } catch (IdentityManagementException ime) {
-                securityContext.setMessage("Oops ! Registration failed, try it later.");
+                response.setMessage("Oops ! Registration failed, try it later.");
             }
         }
         
-        return securityContext;
+        return Response.ok().entity(response).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 
     private void performRegistration(RegistrationRequest request) {
@@ -106,7 +107,7 @@ public class SelfRegistrationService {
         this.identityManager.addToGroup(newUser, userGroup);
     }
     
-    private SecurityResponse performSilentAuthentication(RegistrationRequest request) {
+    private Response performSilentAuthentication(RegistrationRequest request) {
         DefaultLoginCredentials authenticationRequest = new DefaultLoginCredentials();
 
         authenticationRequest.setUserId(request.getEmail());
