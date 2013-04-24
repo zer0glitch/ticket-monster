@@ -54,11 +54,11 @@ import org.picketlink.idm.model.Role;
 @Named
 @ApplicationScoped
 public class AuthorizationManager {
-    
+
     private static final String ANY_RESOURCE_PATTERN = "*";
-    
+
     private Map<String, String[]> roleProtectedResources = new HashMap<String, String[]>();
-    
+
     @Inject
     private Instance<Identity> identity;
 
@@ -67,9 +67,9 @@ public class AuthorizationManager {
 
     @PostConstruct
     public void init() {
-        this.roleProtectedResources.put("/admin/*", new String[] {"Administrator"});
+        this.roleProtectedResources.put("/admin/*", new String[] { "Administrator" });
     }
-    
+
     /**
      * <p>
      * Check if a method or type annotated with the {@link UserLoggedIn} is being access by an authenticated user. This method
@@ -87,40 +87,54 @@ public class AuthorizationManager {
 
     public boolean isAdmin() {
         Identity identity = getIdentity();
-        
+
         if (isUserLoggedIn(identity)) {
             IdentityManager identityManager = getIdentityManager();
-            
+
             return identityManager.hasRole(identity.getUser(), identityManager.getRole("Administrator"));
         }
-        
+
         return false;
     }
 
+    /**
+     * <p>
+     * Check if the current user is allowed to access the requested resource.
+     * </p>
+     * 
+     * @param httpRequest
+     * @throws UserNotLoggedInException If the request requires authentication and the user is not authenticated
+     * @throws AccessDeniedException If the request is not allowed considering the resource permissions.
+     */
     public void isAllowed(HttpServletRequest httpRequest) throws UserNotLoggedInException, AccessDeniedException {
         final String requestURI = httpRequest.getRequestURI();
-        
+
         Set<Entry<String, String[]>> entrySet = this.roleProtectedResources.entrySet();
-        
+
         for (Entry<String, String[]> entry : entrySet) {
             if (matches(entry.getKey(), requestURI)) {
-                if (!getIdentity().isLoggedIn()) {
+                Identity identity = getIdentity();
+
+                if (!identity.isLoggedIn()) {
                     throw new UserNotLoggedInException();
                 } else {
                     String[] roles = entry.getValue();
-                    
+
                     for (String roleName : roles) {
-                        Role role = getIdentityManager().getRole(roleName.trim());
-                        
+                        IdentityManager identityManager = getIdentityManager();
+
+                        Role role = identityManager.getRole(roleName.trim());
+
                         if (role == null) {
-                            throw new IllegalStateException("The specified role does not exists [" + role + "]. Check your configuration.");
+                            throw new IllegalStateException("The specified role does not exists [" + role
+                                    + "]. Check your configuration.");
                         }
-                        
-                        if (!getIdentityManager().hasRole(getIdentity().getUser(), role)) {
+
+                        if (!identityManager.hasRole(identity.getUser(), role)) {
                             HashSet<SecurityViolation> violations = new HashSet<SecurityViolation>();
-                            
+
                             violations.add(new SecurityViolation() {
-                                
+
                                 private static final long serialVersionUID = 1L;
 
                                 @Override
@@ -128,22 +142,22 @@ public class AuthorizationManager {
                                     return "Access denied for resource [" + requestURI + "]";
                                 }
                             });
-                            
+
                             throw new AccessDeniedException(violations);
                         }
                     }
-                } 
+                }
             }
         }
     }
-    
+
     /**
      * <p>
      * Checks if the provided URI matches the specified pattern.
      * </p>
-     *
+     * 
      * @param uri
-     * @param pattern 
+     * @param pattern
      * @return
      */
     private boolean matches(String pattern, String uri) {
@@ -170,7 +184,7 @@ public class AuthorizationManager {
                     ANY_RESOURCE_PATTERN.length() + 1, pattern.length())));
         }
     }
-    
+
     private IdentityManager getIdentityManager() {
         return this.identityManager.get();
     }
