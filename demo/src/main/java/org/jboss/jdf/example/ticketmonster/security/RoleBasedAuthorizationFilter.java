@@ -122,7 +122,9 @@ public class RoleBasedAuthorizationFilter implements Filter {
                 }
             }
             
-            chain.doFilter(httpRequest, httpResponse);
+            if (!httpResponse.isCommitted()) {
+                chain.doFilter(httpRequest, httpResponse);
+            }
         } catch (AccessDeniedException ade) {
             handleAccessDeniedError(httpResponse);
         } catch (Exception e) {

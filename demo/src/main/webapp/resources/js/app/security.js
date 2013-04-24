@@ -12,7 +12,7 @@ function performLogin() {
 	
 	if (username.is(":valid") && password.is(":valid")) {
 		$.ajax({url: ("rest/login"),
-			data:JSON.stringify({ username: username.val(), password: password.val() }),
+			data:JSON.stringify({ userId: username.val(), password: password.val() }),
 			type:"POST",
 			dataType:"json",
 			contentType:"application/json",
