@@ -80,18 +80,32 @@ public class RoleBasedAuthorizationFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         try {
-            this.authorizationManager.isAllowed(httpRequest);
-            chain.doFilter(httpRequest, httpResponse);
-        } catch (UserNotLoggedInException e) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "#login");
+            if (this.authorizationManager.isAllowed(httpRequest)) {
+                performAuthorizedRequest(chain, httpRequest, httpResponse);                
+            } else {
+                handleUnauthorizedRequest(httpRequest, httpResponse);
+            }
         } catch (AccessDeniedException ade) {
-            handleAccessDeniedError(httpResponse);
+            handleUnauthorizedRequest(httpRequest, httpResponse);
         } catch (Exception e) {
             if (AccessDeniedException.class.isInstance(e.getCause())) {
-                handleAccessDeniedError(httpResponse);
+                handleUnauthorizedRequest(httpRequest, httpResponse);
             } else {
                 httpResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             }
+        }
+    }
+
+    private void performAuthorizedRequest(FilterChain chain, HttpServletRequest httpRequest, HttpServletResponse httpResponse)
+            throws IOException, ServletException {
+        chain.doFilter(httpRequest, httpResponse);
+    }
+
+    private void handleUnauthorizedRequest(HttpServletRequest httpRequest, HttpServletResponse httpResponse) throws IOException {
+        if (!getIdentity().isLoggedIn()) {
+            httpResponse.sendRedirect(httpRequest.getContextPath() + "#login");        
+        } else {
+            handleAccessDeniedError(httpResponse);
         }
     }
 

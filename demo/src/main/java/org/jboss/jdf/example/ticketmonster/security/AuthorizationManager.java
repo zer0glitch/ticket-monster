@@ -24,7 +24,6 @@ package org.jboss.jdf.example.ticketmonster.security;
 
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -39,7 +38,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.picketlink.Identity;
 import org.picketlink.deltaspike.Secures;
 import org.picketlink.deltaspike.security.api.authorization.AccessDeniedException;
-import org.picketlink.deltaspike.security.api.authorization.SecurityViolation;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.model.Role;
 
@@ -106,7 +104,7 @@ public class AuthorizationManager {
      * @throws UserNotLoggedInException If the request requires authentication and the user is not authenticated
      * @throws AccessDeniedException If the request is not allowed considering the resource permissions.
      */
-    public void isAllowed(HttpServletRequest httpRequest) throws UserNotLoggedInException, AccessDeniedException {
+    public boolean isAllowed(HttpServletRequest httpRequest) throws UserNotLoggedInException, AccessDeniedException {
         final String requestURI = httpRequest.getRequestURI();
 
         Set<Entry<String, String[]>> entrySet = this.roleProtectedResources.entrySet();
@@ -116,7 +114,7 @@ public class AuthorizationManager {
                 Identity identity = getIdentity();
 
                 if (!identity.isLoggedIn()) {
-                    throw new UserNotLoggedInException();
+                    return false;
                 } else {
                     String[] roles = entry.getValue();
 
@@ -131,24 +129,14 @@ public class AuthorizationManager {
                         }
 
                         if (!identityManager.hasRole(identity.getUser(), role)) {
-                            HashSet<SecurityViolation> violations = new HashSet<SecurityViolation>();
-
-                            violations.add(new SecurityViolation() {
-
-                                private static final long serialVersionUID = 1L;
-
-                                @Override
-                                public String getReason() {
-                                    return "Access denied for resource [" + requestURI + "]";
-                                }
-                            });
-
-                            throw new AccessDeniedException(violations);
+                            return false;
                         }
                     }
                 }
             }
         }
+        
+        return true;
     }
 
     /**
