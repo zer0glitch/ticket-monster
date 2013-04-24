@@ -54,8 +54,8 @@ public class UserInfoService implements Serializable {
     
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public SecurityContext info() {
-        SecurityContext context = new SecurityContext();
+    public SecurityResponse info() {
+        SecurityResponse context = new SecurityResponse();
         
         if (this.identity.isLoggedIn()) {
             context.setUser((User) this.identity.getUser());

@@ -22,29 +22,40 @@
 
 package org.jboss.jdf.example.ticketmonster.security.rest;
 
+import org.picketlink.idm.model.User;
+
 /**
  * @author Pedro Silva
- * 
+ *
  */
-public class AuthenticationRequest {
+public class SecurityResponse {
 
-    private String username;
-    private String password;
+    private User user;
+    private String message;
+    private boolean administrator;
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public String getPassword() {
-        return password;
+    public String getMessage() {
+        return message;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
+    public void setAdministrator(boolean admin) {
+        this.administrator = admin;
+    }
+    
+    public boolean isAdministrator() {
+        return this.administrator;
+    }
+    
 }

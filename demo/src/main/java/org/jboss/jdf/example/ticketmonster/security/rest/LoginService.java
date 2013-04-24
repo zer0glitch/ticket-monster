@@ -48,8 +48,8 @@ public class LoginService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public SecurityContext login(DefaultLoginCredentials request) {
-        SecurityContext context = new SecurityContext();
+    public SecurityResponse login(DefaultLoginCredentials request) {
+        SecurityResponse context = new SecurityResponse();
         
         if (!this.identity.isLoggedIn()) {
             this.credentials.setUserId(request.getUserId());

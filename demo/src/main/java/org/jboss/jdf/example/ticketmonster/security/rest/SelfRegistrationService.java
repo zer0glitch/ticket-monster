@@ -29,6 +29,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.picketlink.credential.DefaultLoginCredentials;
 import org.picketlink.idm.IdentityManagementException;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
@@ -54,8 +55,8 @@ public class SelfRegistrationService {
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    public SecurityContext register(RegistrationRequest request) {
-        SecurityContext securityContext = new SecurityContext();
+    public SecurityResponse register(RegistrationRequest request) {
+        SecurityResponse securityContext = new SecurityResponse();
 
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
             securityContext.setMessage("Password mismatch.");
@@ -105,10 +106,10 @@ public class SelfRegistrationService {
         this.identityManager.addToGroup(newUser, userGroup);
     }
     
-    private SecurityContext performSilentAuthentication(RegistrationRequest request) {
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+    private SecurityResponse performSilentAuthentication(RegistrationRequest request) {
+        DefaultLoginCredentials authenticationRequest = new DefaultLoginCredentials();
 
-        authenticationRequest.setUsername(request.getEmail());
+        authenticationRequest.setUserId(request.getEmail());
         authenticationRequest.setPassword(request.getPassword());
 
         return this.loginService.login(authenticationRequest);
