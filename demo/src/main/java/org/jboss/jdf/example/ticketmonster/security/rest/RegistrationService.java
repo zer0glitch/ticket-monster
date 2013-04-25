@@ -22,6 +22,9 @@
 
 package org.jboss.jdf.example.ticketmonster.security.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
@@ -46,6 +49,8 @@ import org.picketlink.idm.model.User;
 @Stateless
 public class RegistrationService {
 
+    private static final String MESSAGE_RESPONSE_PARAMETER = "message";
+
     @Inject
     private IdentityManager identityManager;
 
@@ -55,20 +60,20 @@ public class RegistrationService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response register(RegistrationRequest request) {
-        SecurityResponse response = new SecurityResponse();
-
+        Map<String, Object> response = new HashMap<String, Object>();
+        
         if (!request.getPassword().equals(request.getPasswordConfirmation())) {
-            response.setMessage("Password mismatch.");
+            response.put(MESSAGE_RESPONSE_PARAMETER, "Password mismatch.");
         } else {
             try {
                 if (this.identityManager.getUser(request.getEmail()) == null) {
                     performRegistration(request);
                     return performSilentAuthentication(request);
                 } else {
-                    response.setMessage("This username is already in use. Try another one.");
+                    response.put(MESSAGE_RESPONSE_PARAMETER, "This username is already in use. Try another one.");
                 }
             } catch (IdentityManagementException ime) {
-                response.setMessage("Oops ! Registration failed, try it later.");
+                response.put(MESSAGE_RESPONSE_PARAMETER, "Oops ! Registration failed, try it later.");
             }
         }
         

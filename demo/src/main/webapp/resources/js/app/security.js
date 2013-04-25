@@ -16,8 +16,8 @@ function performLogin() {
 			type:"POST",
 			dataType:"json",
 			contentType:"application/json",
-			success: function(context) {
-				if (context.user) {
+			success: function(user) {
+				if (user) {
 					window.history.back();
 				} else {
 					$("#error-signin").empty().append("Invalid credentials. Please try again.");
@@ -62,7 +62,7 @@ function performSignUp() {
 			dataType:"json",
 			contentType:"application/json",
 			success: function(context) {
-				if (context.user) {
+				if (context.id) {
 					window.location = ""; 
 				} else {
 					$("#error-signup").empty().append(context.message);
@@ -70,4 +70,24 @@ function performSignUp() {
 			}}
 		);
 	}
+}
+
+function checkUserInfo() {
+	$.ajax({url: ("rest/userinfo"),
+		type:"POST",
+		dataType:"json",
+		contentType:"application/json",
+		success: function(context) {
+			if (context.user) {
+				$("#signInSection").hide();
+				$("#userLoggedInName").empty().append(context.user.firstName + " " + context.user.lastName);
+				$("#userSection").show(); 
+				$("#logoutSection").show();
+				
+				if (context.administrator) {
+					$("#adminSection").show();
+				}
+			}
+		}}
+	);
 }

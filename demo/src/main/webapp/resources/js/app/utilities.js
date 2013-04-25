@@ -71,23 +71,7 @@ define(['order!underscore', 'order!backbone', 'configuration'], function (_, con
                     this.currentView.close();
                 }
                 this.currentView = view;
-            	$.ajax({url: ("rest/userinfo"),
-            		type:"POST",
-            		dataType:"json",
-            		contentType:"application/json",
-            		success: function(context) {
-            			if (context.user) {
-            				$("#signInSection").hide();
-            				$("#userLoggedInName").empty().append(context.user.firstName + " " + context.user.lastName);
-            				$("#userSection").show(); 
-            				$("#logoutSection").show();
-            				
-            				if (context.administrator) {
-            					$("#adminSection").show();
-            				}
-            			}
-            		}}
-            	);
+            	checkUserInfo();
                 return this.currentView.render();
             }
         },

@@ -50,18 +50,18 @@ public class LoginService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response login(DefaultLoginCredentials credential) {
-        SecurityResponse response = new SecurityResponse();
-        
         if (!this.identity.isLoggedIn()) {
             this.credentials.setUserId(credential.getUserId());
             this.credentials.setPassword(credential.getPassword());
             this.identity.login();
         }
         
+        User user = null;
+        
         if (this.identity.isLoggedIn()) {
-            response.setUser((User) this.identity.getUser());
+            user = (User) this.identity.getUser();
         }
         
-        return Response.ok().entity(response).type(MediaType.APPLICATION_JSON_TYPE).build();
+        return Response.ok().entity(user).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 }

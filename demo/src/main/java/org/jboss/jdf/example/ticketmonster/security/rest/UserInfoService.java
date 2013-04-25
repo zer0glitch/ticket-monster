@@ -22,6 +22,9 @@
 
 package org.jboss.jdf.example.ticketmonster.security.rest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -52,14 +55,18 @@ public class UserInfoService {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response info() {
-        SecurityResponse response = new SecurityResponse();
+        User user = null;
         
         if (this.identity.isLoggedIn()) {
-            response.setUser((User) this.identity.getUser());
-            response.setAdministrator(this.authorizationManager.isAdmin());
+            user = (User) this.identity.getUser();
         }
         
-        return Response.ok().entity(response).type(MediaType.APPLICATION_JSON_TYPE).build();
+        Map<String, Object> data = new HashMap<String, Object>();
+        
+        data.put("user", user);
+        data.put("administrator", this.authorizationManager.isAdmin());
+        
+        return Response.ok().entity(data).type(MediaType.APPLICATION_JSON_TYPE).build();
     }
     
 }
