@@ -12,7 +12,7 @@ image::gfx/octocat_social.png[]
 
 link:http://github.com/jboss-jdf/ticket-monster[Fork us on GitHub!]
 
-The accompanying tutorials  walk you through the various tools & technologies needed to build TicketMonster on your own. Alternatively you can download TicketMonster as a completed application and import it into your favorite IDE.
+The accompanying tutorials walk you through the various tools & technologies needed to build TicketMonster on your own. Alternatively you can download TicketMonster as a completed application and import it into your favorite IDE.
 
 Before we dive into the code, let's discuss the requirements for the application.
 
@@ -141,7 +141,7 @@ mvn clean package jboss-as:deploy
 
 First, _create an OpenShift project_.
 
-1. Make sure that you have an OpenShift domain and you have created an application using the `jbosseap-6` cartridge (for more details, get started link:https://openshift.redhat.com/app/getting_started[here]). If you want to use PostgreSQL, add the `postgresql-8.4` cartridge too.
+1. Make sure that you have an OpenShift domain and you have created an application using the `jbosseap-6` cartridge (for more details, get started link:https://openshift.redhat.com/app/getting_started[here]). If you want to use PostgreSQL, add the `postgresql-9.2` cartridge too.
 2. Ensure that the Git repository of the project is checked out.
 
 Then, _build and deploy it_.

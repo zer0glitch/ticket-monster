@@ -88,7 +88,7 @@ class ShowMetric {
 }
 ---------------------------------------------------------------------------------------------------------
 
-The `ShowMetric` class is used to represent the structure of a `Show` in the metrics API. It contains the show identifier, the `Event` name for the `Show`, the `Venue` name for the `Show`, the capacity of the `Venue` and a collection of `PerformanceMetric` instances to represent metrics for individual `Performance`s for the `Show`.
+The `ShowMetric` class is used to represent the structure of a `Show` in the metrics API. It contains the show identifier, the `Event` name for the `Show`, the `Venue` name for the `Show`, the capacity of the `Venue` and a collection of `PerformanceMetric` instances to represent metrics for individual `Performance` s for the `Show`.
 
 The `PerformanceMetric` is represented as:
 
@@ -338,7 +338,7 @@ public class Bot {
         for (int index : indicies) {
             int no = random.nextInt(MAX_TICKETS_PER_REQUEST);
             TicketPrice price = possibleTicketPrices.get(index);  
-            bookingRequest.addTicketRequest(new TicketReservationRequest(price.getId(), no));
+            bookingRequest.addTicketRequest(new TicketRequest(price, no));
             message
                 .append(no)
                 .append(" of ")
@@ -739,13 +739,20 @@ define([
             _.bind(this.liveUpdate, this);
             this.collection.on("add remove change", this.render, this);
             var self = this;
-            $.when(this.collection.fetch())
-                .done(function(){
-                    self.liveUpdate();
-                });
+            $.when(this.collection.fetch({
+                error : function() {
+                    utilities.displayAlert("Failed to retrieve metrics from the TicketMonster server.");
+                }
+            })).done(function(){
+                self.liveUpdate();
+            });
         },
         liveUpdate : function() {
-            this.collection.fetch();
+            this.collection.fetch({
+                error : function() {
+                    utilities.displayAlert("Failed to retrieve metrics from the TicketMonster server.");
+                }
+            });
             var self = this;
             this.timerObject = setTimeout(function(){
                 self.liveUpdate();
@@ -776,7 +783,7 @@ When the view is closed/destroyed, the associated timer if present is cleared.
 .src/main/webapp/resources/templates/desktop/metrics.html
 [source,html]
 -------------------------------------------------------------------------------------------------------
-<div class="span7">
+<div class="col-md-12">
   <h3 class="page-header light-font special-title">Booking status</h3>
   <div id="status-content">
       <%
@@ -785,12 +792,14 @@ When the view is closed/destroyed, the associated timer if present is cleared.
       <div class="show-status">
         <div class="show-status-header"><%=show.get('event')%> @ <%=show.get('venue')%></div>
         <%_.each(show.get('performances'), function (performance) {%>
-        <div class="performance-status">
-          <div class="pull-left"><%=new Date(performance.date).toLocaleString()%></div>
-          <div class="pull-left performance-status-progress progress progress-success">
-            <div style="width: <%=(performance.occupiedCount)/(show.get('capacity'))*100%>%;" class="bar"></div>
+        <div class="row">
+          <div class="col-md-4"><%=new Date(performance.date).toLocaleString()%></div>
+          <div class="col-md-4">
+            <div class="progress">
+              <div style="width: <%=(performance.occupiedCount)/(show.get('capacity'))*100%>%;" class="progress-bar progress-bar-success"></div>
+            </div>
           </div>
-          <div><%=performance.occupiedCount%> of <%=show.get('capacity')%> tickets booked</div>
+          <div class="col-md-4"><%=performance.occupiedCount%> of <%=show.get('capacity')%> tickets booked</div>
         </div>
         <% }); %>
       </div>
@@ -977,7 +986,7 @@ The startBot, stopBot and resetBot event handlers are setup to handle click even
 .src/main/webapp/resources/templates/desktop/bot.html
 [source,html]
 -------------------------------------------------------------------------------------------------------
-<div class="span5">
+<div class="col-md-12">
   <h3 class="page-header light-font special-title">Bot</h3>
   <div id="bot-content">
     <div class="btn-group">
@@ -1003,7 +1012,7 @@ Now that we have the constituent views for the dashboard, let's wire it up into 
 
 Let's create a composite Backbone view to hold the MetricsView and BotView as it's constituent sub-views.
 
-.src/main/webapp/resources/js/app/router/desktop/router.js
+.src/main/webapp/resources/js/app/views/desktop/monitor.js
 [source, javascript]
 -------------------------------------------------------------------------------------------------------
 define([
@@ -1055,10 +1064,10 @@ The HTML template used by the composite just lays out a structure for the sub-vi
 .src/main/webapp/resources/templates/desktop/monitor.html
 [source,html]
 -------------------------------------------------------------------------------------------------------
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div id="metrics-view" class="span7"></div>
-    <div id="bot-view" class="span5"></div>
+    <div id="metrics-view" class="col-md-7"></div>
+    <div id="bot-view" class="col-md-5"></div>
   </div>
 </div>
 -------------------------------------------------------------------------------------------------------
