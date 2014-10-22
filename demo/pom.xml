@@ -39,67 +39,53 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- JBoss distributes a complete set of Java EE 6 APIs including 
-                a Bill of Materials (BOM). A BOM specifies the versions of a "stack" (or 
-                a collection) of artifacts. We use this here so that we always get the correct 
-                versions of artifacts. Here we use the jboss-javaee-6.0-with-tools stack 
-                (you can read this as the JBoss stack of the Java EE 6 APIs, with some extras 
-                tools for your project, such as Arquillian for testing), the jboss-javaee-6.0-with-hibernate 
-                stack (you can read this as the JBoss stack of the Java EE 6 APIs, with extras 
-                from the Hibernate family of projects), and the jboss-javaee-6.0-with-resteasy
-                stack (you can read this as the JBoss stack of the Java EE 6 APIs, with extras
-                from the RESTEasy project). -->
-            <dependency>
-                <groupId>org.jboss.bom.wfk</groupId>
-                <artifactId>jboss-javaee-6.0-with-tools</artifactId>
-                <version>${jboss.wfk.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.bom.eap</groupId>
-                <artifactId>jboss-javaee-6.0-with-hibernate</artifactId>
-                <version>${jboss.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.bom.eap</groupId>
-                <artifactId>jboss-javaee-6.0-with-resteasy</artifactId>
-                <version>${jboss.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+            <!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill 
+                of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection) 
+                of artifacts. We use this here so that we always get the correct versions 
+                of artifacts. Here we use the jboss-javaee-6.0-with-tools stack (you can 
+                read this as the JBoss stack of the Java EE 6 APIs, with some extras tools 
+                for your project, such as Arquillian for testing) and the jboss-javaee-6.0-with-hibernate 
+                stack you can read this as the JBoss stack of the Java EE 6 APIs, with extras 
+                from the Hibernate family of projects) -->
+			<dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>jboss-javaee-7.0-with-tools</artifactId>
+				<version>8.1.0.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+    		<dependency>
+		       <groupId>org.wildfly.bom</groupId>
+	           <artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
+	           <version>8.1.0.Final</version>
+	           <type>pom</type>
+	           <scope>import</scope>
+        	</dependency>
+	        <dependency>
+				<groupId>org.wildfly.bom</groupId>
+				<artifactId>jboss-javaee-7.0-with-resteasy</artifactId>
+				<version>8.1.0.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
         </dependencies>
     </dependencyManagement>
 
     <dependencies>
 
-        <!-- First declare the APIs we depend on and need for compilation. 
-            All of them are provided by JBoss EAP -->
+        <!-- First declare the APIs we depend on and need for compilation. All 
+            of them are provided by JBoss AS 7 -->
 
-        <!-- Import the CDI API, we use provided scope as the API is included 
-            in JBoss EAP -->
+        <!-- Import the CDI API, we use provided scope as the API is included in 
+            WildFly -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <scope>provided</scope>
         </dependency>
-        
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>javax.validation</groupId>
-            <artifactId>validation-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-       
-        <!-- Import the Common Annotations API (JSR-250), we use provided 
-            scope as the API is included in JBoss EAP -->
+
+        <!-- Import the Common Annotations API (JSR-250), we use provided scope 
+            as the API is included in WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.annotation</groupId>
             <artifactId>jboss-annotations-api_1.1_spec</artifactId>
@@ -107,34 +93,27 @@
         </dependency>
 
         <!-- Import the JAX-RS API, we use provided scope as the API is included 
-            in JBoss EAP -->
+            in WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
+            <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+            <version>1.0.0.Alpha1</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Import the JPA API, we use provided scope as the API is included 
-            in JBoss EAP -->
+        <!-- Import the JPA API, we use provided scope as the API is included in 
+            WildFly -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Import the EJB API, we use provided scope as the API is included 
-            in JBoss EAP -->
+        <!-- Import the EJB API, we use provided scope as the API is included in 
+            WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Import the Servlet API, we use provided scope as the API is 
-            included in JBoss EAP -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -196,13 +175,19 @@
         <!-- RESTEasy dependencies that bring in Jackson Core and RESTEasy APIs+SPIs, which we use for
             fine tuning the content of the JSON responses -->
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jackson-provider</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jaxrs</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.spec.javax.servlet</groupId>
+            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -221,8 +206,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>2.3.1</version>
                     <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+                        <source>1.7</source>
+                        <target>1.7</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -275,32 +260,32 @@
 
 
         <profile>
-            <!-- An optional Arquillian testing profile that executes tests 
-                in your JBoss AS instance -->
-            <!-- This profile will start a new JBoss AS instance, and execute 
-                the test, shutting it down when done -->
+            <!-- An optional Arquillian testing profile that executes tests in your 
+                JBoss AS instance -->
+            <!-- This profile will start a new JBoss AS instance, and execute the 
+                test, shutting it down when done -->
             <!-- Run with: mvn clean test -Parq-jbossas-managed -->
-            <id>arq-jbossas-managed</id>
+            <id>arq-wildfly-managed</id>
             <dependencies>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
-                    <scope>test</scope>
-                </dependency>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<scope>test</scope>
+				</dependency>
             </dependencies>
         </profile>
 
         <profile>
-            <!-- An optional Arquillian testing profile that executes tests 
-                in a remote JBoss AS instance -->
+            <!-- An optional Arquillian testing profile that executes tests in a remote 
+                JBoss AS instance -->
             <!-- Run with: mvn clean test -Parq-jbossas-remote -->
-            <id>arq-jbossas-remote</id>
+            <id>arq-wildfly-remote</id>
             <dependencies>
-                <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
-                    <scope>test</scope>
-                </dependency>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<scope>test</scope>
+				</dependency>
             </dependencies>
         </profile>
 
@@ -497,4 +482,30 @@
 		</profile>
 
     </profiles>
+    
+    <repositories>
+      <repository>
+        <id>jboss-ga-repository</id>
+        <url>http://maven.repository.redhat.com/techpreview/all</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+      </repository>
+    </repositories>
+    <pluginRepositories>
+      <pluginRepository>
+        <id>jboss-ga-plugin-repository</id>
+        <url>http://maven.repository.redhat.com/techpreview/all</url>
+        <releases>
+          <enabled>true</enabled>
+        </releases>
+        <snapshots>
+          <enabled>false</enabled>
+        </snapshots>
+      </pluginRepository>
+    </pluginRepositories>
+    
 </project>
