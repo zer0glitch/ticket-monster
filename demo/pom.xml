@@ -197,6 +197,13 @@
         <!-- Maven will append the version to the finalName (which is the
        name given to the generated war, and hence the context root) -->
         <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+            </plugin>
+        </plugins>
         <pluginManagement>
 
             <plugins>
