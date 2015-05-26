@@ -25,15 +25,6 @@
         <!-- Specify the JBoss AS directory to be the JBOSS_HOME environment 
             variable -->
         <jboss.home>${env.JBOSS_HOME}</jboss.home>
-        <!-- Define the version of JBoss' Java EE 6 APIs and Tools we want 
-            to import. -->
-        <!-- <jboss.bom.version>1.0.4.Final-redhat-9</jboss.bom.version> -->
-        <!-- Alternatively, comment out the above line, and un-comment the 
-            line below to use version 1.0.4.Final-redhat-9 which is a release certified 
-            to work with JBoss EAP 6.2. It requires you have access to the JBoss EAP 6.2
-            maven repository. -->
-        <jboss.bom.version>6.2.3.GA</jboss.bom.version>
-        <jboss.wfk.bom.version>2.6.0-redhat-1</jboss.wfk.bom.version>
         <buildhelper.plugin.version>1.7</buildhelper.plugin.version>
     </properties>
 
@@ -50,21 +41,21 @@
 			<dependency>
 				<groupId>org.wildfly.bom</groupId>
 				<artifactId>jboss-javaee-7.0-with-tools</artifactId>
-				<version>8.1.0.Final</version>
+				<version>8.2.2.Final</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
     		<dependency>
 		       <groupId>org.wildfly.bom</groupId>
 	           <artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
-	           <version>8.1.0.Final</version>
+	           <version>8.2.2.Final</version>
 	           <type>pom</type>
 	           <scope>import</scope>
         	</dependency>
 	        <dependency>
 				<groupId>org.wildfly.bom</groupId>
 				<artifactId>jboss-javaee-7.0-with-resteasy</artifactId>
-				<version>8.1.0.Final</version>
+				<version>8.2.2.Final</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -88,7 +79,7 @@
             as the API is included in WildFly -->
         <dependency>
             <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
             <scope>provided</scope>
         </dependency>
 
@@ -97,7 +88,7 @@
         <dependency>
             <groupId>org.jboss.spec.javax.ws.rs</groupId>
             <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-            <version>1.0.0.Alpha1</version>
+            <version>1.0.0.Final</version>
             <scope>provided</scope>
         </dependency>
 
@@ -271,7 +262,7 @@
                 JBoss AS instance -->
             <!-- This profile will start a new JBoss AS instance, and execute the 
                 test, shutting it down when done -->
-            <!-- Run with: mvn clean test -Parq-jbossas-managed -->
+            <!-- Run with: mvn clean test -Parq-wildfly-managed -->
             <id>arq-wildfly-managed</id>
             <dependencies>
 				<dependency>
@@ -285,7 +276,7 @@
         <profile>
             <!-- An optional Arquillian testing profile that executes tests in a remote 
                 JBoss AS instance -->
-            <!-- Run with: mvn clean test -Parq-jbossas-remote -->
+            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
             <id>arq-wildfly-remote</id>
             <dependencies>
 				<dependency>
@@ -487,7 +478,6 @@
 		      </plugins>
 		    </build>
 		</profile>
-
     </profiles>
     
     <repositories>
