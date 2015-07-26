@@ -104,7 +104,7 @@ We now have a database-driven CRUD UI for all the entities used in TicketMonster
 Let's test our UI on our local JBoss AS instance. As usual, we'll build and deploy using Maven:
 
 ----
-mvn clean package jboss-as:deploy
+mvn clean package wildfly:deploy
 ----
 
 == Make some changes to the UI
@@ -522,13 +522,13 @@ public class RESTDeployment {
 We can test these changes by executing
 
 ----
-mvn clean test -Parq-jbossas-managed
+mvn clean test -Parq-wildfly-managed
 ----
 
 or (against an already running JBoss EAP 6.2 instance)
 
 ----
-mvn clean test -Parq-jbossas-remote
+mvn clean test -Parq-wildfly-remote
 ----
 
 as usual.

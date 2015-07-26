@@ -290,7 +290,7 @@ Under src you will find:
 `test/java/test`::
     provides the `.test` package that contains `MemberRegistrationTest.java`, an Arquillian based test that runs both from within JBoss Developer Studio via *Run As -> JUnit Test* and at the command line:
 +
-`mvn test –Parq-jbossas-remote`
+`mvn test –Parq-wildfly-remote`
 +
 Note that you will need to start the JBoss Enterprise Application Platform 6.3 server before running the test.
    

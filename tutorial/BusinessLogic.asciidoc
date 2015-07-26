@@ -1598,12 +1598,12 @@ If you have followed the instructions in the introduction and used the Maven arc
                 in your JBoss AS instance -->
             <!-- This profile will start a new JBoss AS instance, and execute
                 the test, shutting it down when done -->
-            <!-- Run with: mvn clean test -Parq-jbossas-managed -->
-            <id>arq-jbossas-managed</id>
+            <!-- Run with: mvn clean test -Parq-wildfly-managed -->
+            <id>arq-wildfly-managed</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-managed</artifactId>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-managed</artifactId>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -1612,12 +1612,12 @@ If you have followed the instructions in the introduction and used the Maven arc
         <profile>
             <!-- An optional Arquillian testing profile that executes tests
                 in a remote JBoss AS instance -->
-            <!-- Run with: mvn clean test -Parq-jbossas-remote -->
-            <id>arq-jbossas-remote</id>
+            <!-- Run with: mvn clean test -Parq-wildfly-remote -->
+            <id>arq-wildfly-remote</id>
             <dependencies>
                 <dependency>
-                    <groupId>org.jboss.as</groupId>
-                    <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                    <groupId>org.wildfly.arquillian</groupId>
+                    <artifactId>wildfly-arquillian-container-remote</artifactId>
                     <scope>test</scope>
                 </dependency>
             </dependencies>
@@ -1629,7 +1629,7 @@ If you have followed the instructions in the introduction and used the Maven arc
 
 If you haven't used the archetype, or the profiles don't exist, create them.
 
-Each profile defines a different Arquillian container. In both cases the tests execute in an application server instance. In one case (`arq-jbossas-managed`) the server instance is started and stopped by the test suite, while in the other (`arq-jbossas-remote`), the test suite expects an already started server instance.
+Each profile defines a different Arquillian container. In both cases the tests execute in an application server instance. In one case (`arq-wildfly-managed`) the server instance is started and stopped by the test suite, while in the other (`arq-wildfly-remote`), the test suite expects an already started server instance.
 
 Once these profiles are defined, we can execute the tests in two ways:
 
@@ -1644,13 +1644,13 @@ You can now execute the test suite from the command line by running the Maven bu
 After ensuring that the `JBOSS_HOME` environment variable is set to a valid JBoss EAP 6.2 installation directory), you can run the following command:
 
 ----
-mvn clean test -Parq-jbossas-managed
+mvn clean test -Parq-wildfly-managed
 ----
 
 Or, after starting a JBoss EAP 6.2 instance, you can run the following command
 
 ----
-mvn clean test -Parq-jbossas-remote
+mvn clean test -Parq-wildfly-remote
 ----
 
 These tests execute as part of the Maven build and can be easily included in an automated build and test harness.

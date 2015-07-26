@@ -80,15 +80,15 @@ Then, _deploy TicketMonster_.
 2. Type this command to build and deploy the archive into a running server instance.
 +
 ----
-mvn clean package jboss-as:deploy
+mvn clean package wildfly:deploy
 ----
 +
-(You can use the `arq-jbossas-remote` profile for running tests as well)
+(You can use the `arq-wildfly-remote` profile for running tests as well)
 +
 If you have not configured the Maven settings, to use the Red Hat Enterprise Maven repositories: 
 +
 ----
-mvn clean package jboss-as:deploy -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
+mvn clean package wildfly:deploy -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
 ----
 3. This will deploy `target/ticket-monster.war` to the running instance of the server.
 4. Now you can see the application running at http://localhost:8080/ticket-monster.
@@ -166,12 +166,12 @@ Replace the values for the `connection-url`, `user-name` and `password` with the
 .. If you are building and deploying from the command-line, activate the `mysql` profile, by specifying it during the build command like so:
 +
 ----
-mvn clean package jboss-as:deploy -Pmysql
+mvn clean package wildfly:deploy -Pmysql
 ----
 .. If you have not configured the Maven settings, to use the Red Hat Enterprise Maven repositories: 
 +
 ----
-mvn clean package jboss-as:deploy -Pmysql -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
+mvn clean package wildfly:deploy -Pmysql -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
 ----
 
 
@@ -246,10 +246,10 @@ Replace the values for the `connection-url`, `user-name` and `password` with the
 .. If you are building and deploying from the command-line, activate the `postgresql` profile, by specifying it during the build command like so:
 +
 ----
-mvn clean package jboss-as:deploy -Ppostgresql
+mvn clean package wildfly:deploy -Ppostgresql
 ----
 .. If you have not configured the Maven settings, to use the Red Hat Enterprise Maven repositories: 
 +
 ----
-mvn clean package jboss-as:deploy -Ppostgresql -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
+mvn clean package wildfly:deploy -Ppostgresql -s TICKETMONSTER_MAVEN_PROJECT_ROOT/settings.xml
 ----

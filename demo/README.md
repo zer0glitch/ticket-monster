@@ -31,7 +31,7 @@ Before building and running TicketMonster, you must generate the administration 
 
 4. Deployment to JBoss EAP 6.3 is optional. The project can be built and deployed to a running instance of JBoss EAP through the following command in JBoss Forge:
 
-	    $ build clean package jboss-as:deploy
+	    $ build clean package wildfly:deploy
 
 ## Building TicketMonster
 
@@ -43,13 +43,13 @@ TicketMonster can be built from Maven, by runnning the following Maven command:
 	
 If you want to run the Arquillian tests as part of the build, you can enable one of the two available Arquillian profiles.
 
-For running the tests in an _already running_ application server instance, use the `arq-jbossas-remote` profile.
+For running the tests in an _already running_ application server instance, use the `arq-wildfly-remote` profile.
 
-    mvn clean package -Parq-jbossas-remote
+    mvn clean package -Parq-wildfly-remote
 
-If you want the test runner to _start_ an application server instance, use the `arq-jbossas-managed` profile. You must set up the `JBOSS_HOME` property to point to the server location, or update the `src/main/test/resources/arquillian.xml` file.
+If you want the test runner to _start_ an application server instance, use the `arq-wildfly-managed` profile. You must set up the `JBOSS_HOME` property to point to the server location, or update the `src/main/test/resources/arquillian.xml` file.
 
-    mvn clean package -Parq-jbossas-managed
+    mvn clean package -Parq-wildfly-managed
 	
 ### Building TicketMonster with Postgresql (for OpenShift)
 
@@ -82,9 +82,9 @@ You can run TicketMonster into a local JBoss EAP 6.3 instance or on OpenShift.
 1. Make sure you have started the JBoss Server as described above.
 2. Type this command to build and deploy the archive into a running server instance.
 
-        mvn clean package jboss-as:deploy
+        mvn clean package wildfly:deploy
 	
-	(You can use the `arq-jbossas-remote` profile for running tests as well)
+	(You can use the `arq-wildfly-remote` profile for running tests as well)
 
 3. This will deploy `target/ticket-monster.war` to the running instance of the server.
 4. Now you can see the application running at `http://localhost:8080/ticket-monster`
