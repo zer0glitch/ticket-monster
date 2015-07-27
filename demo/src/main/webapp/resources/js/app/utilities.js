@@ -75,7 +75,8 @@ define(['underscore', 'backbone'], function (_, Backbone) {
             }
         },
         renderTemplate:function (template, data) {
-            return _.template(template, (data == undefined) ? {} : data);
+            var compiled = _.template(template);
+            return compiled((data == undefined) ? {} : data);
         },
         applyTemplate:function (target, template, data) {
             return target.empty().append(this.renderTemplate(template, data));
