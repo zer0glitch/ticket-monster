@@ -1,6 +1,6 @@
 
 
-angular.module('ticketmonster').controller('EditSectionController', function($scope, $routeParams, $location, SectionResource , VenueResource) {
+angular.module('ticketmonster').controller('EditSectionController', function($scope, $routeParams, $location, flash, SectionResource , VenueResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -28,6 +28,7 @@ angular.module('ticketmonster').controller('EditSectionController', function($sc
             });
         };
         var errorCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The section could not be found.'});
             $location.path("/Sections");
         };
         SectionResource.get({SectionId:$routeParams.SectionId}, successCallback, errorCallback);
@@ -39,11 +40,15 @@ angular.module('ticketmonster').controller('EditSectionController', function($sc
 
     $scope.save = function() {
         var successCallback = function(){
+            flash.setMessage({'type':'success','text':'The section was updated successfully.'}, true);
             $scope.get();
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         $scope.section.$update(successCallback, errorCallback);
     };
@@ -54,11 +59,15 @@ angular.module('ticketmonster').controller('EditSectionController', function($sc
 
     $scope.remove = function() {
         var successCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The section was deleted.'});
             $location.path("/Sections");
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         }; 
         $scope.section.$remove(successCallback, errorCallback);
     };

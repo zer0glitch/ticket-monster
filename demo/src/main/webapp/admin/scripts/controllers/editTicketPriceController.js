@@ -1,6 +1,6 @@
 
 
-angular.module('ticketmonster').controller('EditTicketPriceController', function($scope, $routeParams, $location, TicketPriceResource , ShowResource, SectionResource, TicketCategoryResource) {
+angular.module('ticketmonster').controller('EditTicketPriceController', function($scope, $routeParams, $location, flash, TicketPriceResource , ShowResource, SectionResource, TicketCategoryResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -62,6 +62,7 @@ angular.module('ticketmonster').controller('EditTicketPriceController', function
             });
         };
         var errorCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The ticketPrice could not be found.'});
             $location.path("/TicketPrices");
         };
         TicketPriceResource.get({TicketPriceId:$routeParams.TicketPriceId}, successCallback, errorCallback);
@@ -73,11 +74,15 @@ angular.module('ticketmonster').controller('EditTicketPriceController', function
 
     $scope.save = function() {
         var successCallback = function(){
+            flash.setMessage({'type':'success','text':'The ticketPrice was updated successfully.'}, true);
             $scope.get();
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         $scope.ticketPrice.$update(successCallback, errorCallback);
     };
@@ -88,11 +93,15 @@ angular.module('ticketmonster').controller('EditTicketPriceController', function
 
     $scope.remove = function() {
         var successCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The ticketPrice was deleted.'});
             $location.path("/TicketPrices");
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         }; 
         $scope.ticketPrice.$remove(successCallback, errorCallback);
     };

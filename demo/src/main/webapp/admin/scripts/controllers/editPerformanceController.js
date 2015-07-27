@@ -1,6 +1,6 @@
 
 
-angular.module('ticketmonster').controller('EditPerformanceController', function($scope, $routeParams, $location, PerformanceResource , ShowResource) {
+angular.module('ticketmonster').controller('EditPerformanceController', function($scope, $routeParams, $location, flash, PerformanceResource , ShowResource) {
     var self = this;
     $scope.disabled = false;
     $scope.$location = $location;
@@ -28,6 +28,7 @@ angular.module('ticketmonster').controller('EditPerformanceController', function
             });
         };
         var errorCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The performance could not be found.'});
             $location.path("/Performances");
         };
         PerformanceResource.get({PerformanceId:$routeParams.PerformanceId}, successCallback, errorCallback);
@@ -39,11 +40,15 @@ angular.module('ticketmonster').controller('EditPerformanceController', function
 
     $scope.save = function() {
         var successCallback = function(){
+            flash.setMessage({'type':'success','text':'The performance was updated successfully.'}, true);
             $scope.get();
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         $scope.performance.$update(successCallback, errorCallback);
     };
@@ -54,11 +59,15 @@ angular.module('ticketmonster').controller('EditPerformanceController', function
 
     $scope.remove = function() {
         var successCallback = function() {
+            flash.setMessage({'type': 'error', 'text': 'The performance was deleted.'});
             $location.path("/Performances");
-            $scope.displayError = false;
         };
-        var errorCallback = function() {
-            $scope.displayError=true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         }; 
         $scope.performance.$remove(successCallback, errorCallback);
     };

@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewPerformanceController', function ($scope, $location, locationParser, PerformanceResource , ShowResource) {
+angular.module('ticketmonster').controller('NewPerformanceController', function ($scope, $location, locationParser, flash, PerformanceResource , ShowResource) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.performance = $scope.performance || {};
@@ -23,11 +23,15 @@ angular.module('ticketmonster').controller('NewPerformanceController', function 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/Performances/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The performance was created successfully.'});
+            $location.path('/Performances');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         PerformanceResource.save($scope.performance, successCallback, errorCallback);
     };

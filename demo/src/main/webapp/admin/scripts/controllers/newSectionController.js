@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewSectionController', function ($scope, $location, locationParser, SectionResource , VenueResource) {
+angular.module('ticketmonster').controller('NewSectionController', function ($scope, $location, locationParser, flash, SectionResource , VenueResource) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.section = $scope.section || {};
@@ -23,11 +23,15 @@ angular.module('ticketmonster').controller('NewSectionController', function ($sc
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/Sections/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The section was created successfully.'});
+            $location.path('/Sections');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         SectionResource.save($scope.section, successCallback, errorCallback);
     };

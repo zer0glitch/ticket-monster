@@ -1,6 +1,6 @@
 
 
-angular.module('ticketmonster').controller('SearchEventCategoryController', function($scope, $http, EventCategoryResource ) {
+angular.module('ticketmonster').controller('SearchEventCategoryController', function($scope, $http, $filter, EventCategoryResource ) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -20,7 +20,8 @@ angular.module('ticketmonster').controller('SearchEventCategoryController', func
 
     $scope.performSearch = function() {
         $scope.searchResults = EventCategoryResource.queryAll(function(){
-            $scope.numberOfPages();
+            $scope.filteredResults = $filter('searchFilter')($scope.searchResults, $scope);
+            $scope.currentPage = 0;
         });
     };
     

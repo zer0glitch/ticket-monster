@@ -1,6 +1,6 @@
 
 
-angular.module('ticketmonster').controller('SearchSectionAllocationController', function($scope, $http, SectionAllocationResource , PerformanceResource, SectionResource) {
+angular.module('ticketmonster').controller('SearchSectionAllocationController', function($scope, $http, $filter, SectionAllocationResource , PerformanceResource, SectionResource) {
 
     $scope.search={};
     $scope.currentPage = 0;
@@ -22,7 +22,8 @@ angular.module('ticketmonster').controller('SearchSectionAllocationController', 
 
     $scope.performSearch = function() {
         $scope.searchResults = SectionAllocationResource.queryAll(function(){
-            $scope.numberOfPages();
+            $scope.filteredResults = $filter('searchFilter')($scope.searchResults, $scope);
+            $scope.currentPage = 0;
         });
     };
     

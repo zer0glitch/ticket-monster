@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewVenueController', function ($scope, $location, locationParser, VenueResource , MediaItemResource, SectionResource) {
+angular.module('ticketmonster').controller('NewVenueController', function ($scope, $location, locationParser, flash, VenueResource , MediaItemResource, SectionResource) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.venue = $scope.venue || {};
@@ -37,16 +37,20 @@ angular.module('ticketmonster').controller('NewVenueController', function ($scop
             });
         }
     });
-    
+
 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/Venues/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The venue was created successfully.'});
+            $location.path('/Venues');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         VenueResource.save($scope.venue, successCallback, errorCallback);
     };

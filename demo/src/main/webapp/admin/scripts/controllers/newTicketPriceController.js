@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewTicketPriceController', function ($scope, $location, locationParser, TicketPriceResource , ShowResource, SectionResource, TicketCategoryResource) {
+angular.module('ticketmonster').controller('NewTicketPriceController', function ($scope, $location, locationParser, flash, TicketPriceResource , ShowResource, SectionResource, TicketCategoryResource) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.ticketPrice = $scope.ticketPrice || {};
@@ -74,11 +74,15 @@ angular.module('ticketmonster').controller('NewTicketPriceController', function 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/TicketPrices/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The ticketPrice was created successfully.'});
+            $location.path('/TicketPrices');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         TicketPriceResource.save($scope.ticketPrice, successCallback, errorCallback);
     };

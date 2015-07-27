@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewShowController', function ($scope, $location, locationParser, ShowResource , EventResource, PerformanceResource, VenueResource, TicketPriceResource) {
+angular.module('ticketmonster').controller('NewShowController', function ($scope, $location, locationParser, flash, ShowResource , EventResource, PerformanceResource, VenueResource, TicketPriceResource) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.show = $scope.show || {};
@@ -37,7 +37,7 @@ angular.module('ticketmonster').controller('NewShowController', function ($scope
             });
         }
     });
-    
+
     $scope.venueList = VenueResource.queryAll(function(items){
         $scope.venueSelectionList = $.map(items, function(item) {
             return ( {
@@ -71,16 +71,20 @@ angular.module('ticketmonster').controller('NewShowController', function ($scope
             });
         }
     });
-    
+
 
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/Shows/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The show was created successfully.'});
+            $location.path('/Shows');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         ShowResource.save($scope.show, successCallback, errorCallback);
     };

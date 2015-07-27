@@ -1,5 +1,5 @@
 
-angular.module('ticketmonster').controller('NewMediaItemController', function ($scope, $location, locationParser, MediaItemResource ) {
+angular.module('ticketmonster').controller('NewMediaItemController', function ($scope, $location, locationParser, flash, MediaItemResource ) {
     $scope.disabled = false;
     $scope.$location = $location;
     $scope.mediaItem = $scope.mediaItem || {};
@@ -12,11 +12,15 @@ angular.module('ticketmonster').controller('NewMediaItemController', function ($
     $scope.save = function() {
         var successCallback = function(data,responseHeaders){
             var id = locationParser(responseHeaders);
-            $location.path('/MediaItems/edit/' + id);
-            $scope.displayError = false;
+            flash.setMessage({'type':'success','text':'The mediaItem was created successfully.'});
+            $location.path('/MediaItems');
         };
-        var errorCallback = function() {
-            $scope.displayError = true;
+        var errorCallback = function(response) {
+            if(response && response.data && response.data.message) {
+                flash.setMessage({'type': 'error', 'text': response.data.message}, true);
+            } else {
+                flash.setMessage({'type': 'error', 'text': 'Something broke. Retry, or cancel and start afresh.'}, true);
+            }
         };
         MediaItemResource.save($scope.mediaItem, successCallback, errorCallback);
     };
