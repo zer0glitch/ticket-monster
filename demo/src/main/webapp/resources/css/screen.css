@@ -9,11 +9,28 @@ body {
     background: url(../img/bg.png) repeat 0 0 #CCC;
 }
 
+@media (max-width: 767px) {
+    body {
+        background: #5f5f5f;
+    }
+}
+
 footer {
     clear: both;
     text-align: center;
     color: #666666;
     font-size: 0.85em;
+}
+
+.mobile-footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    margin: 0;
+    width: 100%;
+    clear: both;
+    height: 60px;
+    background: #CCC;
 }
 
 a {
@@ -152,6 +169,12 @@ footer {
     width: auto;
 }
 
+@media (max-width: 767px) {
+    #container {
+        background: #5f5f5f;
+    }
+}
+
 #menu {
     width: auto;
     margin: 0 auto;
@@ -168,7 +191,7 @@ footer {
 }
 
 #content {
-    padding-bottom: 30px;
+    padding-bottom: 60px;
 }
 
 /* Navbar */
@@ -193,11 +216,6 @@ footer {
 .navbar-toggle .icon-bar {
     /* The border is not visible by default. */
     border: 1px solid;
-}
-
-#navbar-items {
-    /* Remove the scrollbars from the expanded menu */
-    overflow: visible;
 }
 
 /* Left Column */
@@ -287,6 +305,10 @@ footer {
     margin: 50px 0;
 }
 
+ol.carousel-indicators {
+    display: none;
+}
+
 /* Pagination */
 
 ul.pagination > li > a,
@@ -362,6 +384,12 @@ ul.pagination .active > a:hover {
 
 .top5 {
     margin-top: 5%;
+}
+
+@media (max-width: 767px) {
+    .top4 {
+        margin-top: 4%;
+    }
 }
 
 h2.page-header {
