@@ -2,10 +2,11 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'bootstrap',
     'angularRoute',
     'angularResource'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.eventsView', ['ngRoute', 'ngResource'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/events', {
@@ -18,20 +19,23 @@ define([
                 restrict: 'A',
                 template: '',
                 link: function(scope, el, attrs) {
-                    $(el).popover({
-                        trigger: 'hover',
-                        container: '#content',
-                        content: attrs.content,
-                        title: attrs.originalTitle
-                    });
+                	if(!Modernizr.touch) {
+	                    $(el).popover({
+	                        trigger: 'hover',
+	                        container: '#content',
+	                        content: attrs.content,
+	                        title: attrs.originalTitle
+	                    });
+                	}
                 }
             };
         })
         .factory('EventResource', function($resource){
-            var resource = $resource('rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .controller('EventsController', ['$scope','EventResource', function($scope, EventResource) {
+        	$scope.config = config;
             $scope.events = EventResource.queryAll(function(data) {
                 $scope.events = data;
                 $scope.categories = _.uniq(

@@ -6,7 +6,9 @@
         <div class="well">
             <div class="row">
                 <h3 class="page-header col-md-6">Where?</h3>
-                <img ng-if="venue.mediaItem" width="100" ng-src="{{'rest/media/' + venue.mediaItem.id}}" class="visible-md-block visible-lg-block" />
+                <div class="col-md-6" id='venueMedia'>
+                	<img ng-if="venue.mediaItem" width="100%" ng-src="{{config.baseUrl + 'rest/media/' + venue.mediaItem.id}}" />
+                </div>
             </div>
             <div class="row top5">
                 <div class="col-md-12">{{venue.description}}</div>
@@ -18,7 +20,7 @@
             <div class="row">
                 <h3 class="page-header col-md-6">What?</h3>
                 <div class="col-md-6" id='eventMedia'>
-                    <img ng-if="selectedShow.event.mediaItem" width="100" ng-src='{{"rest/media/" + selectedShow.event.mediaItem.id}}' class="visible-md-block visible-lg-block" />
+                    <img ng-if="selectedShow.event.mediaItem" width="100%" ng-src='{{config.baseUrl + "rest/media/" + selectedShow.event.mediaItem.id}}' />
                 </div>
             </div>
             <div class="row top5">

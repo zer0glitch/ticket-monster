@@ -2,8 +2,9 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'angularRoute'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.bookingView', ['ngRoute'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider
@@ -28,15 +29,15 @@ define([
             };
         })
         .factory('ShowResource', function($resource){
-            var resource = $resource('rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .factory('BookingResource', function($resource){
-            var resource = $resource('rest/bookings/:bookingId',{bookingId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/bookings/:bookingId',{bookingId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .factory('PerformanceDetailsResource', function($resource){
-            var resource = $resource('rest/shows/performance/:performanceId',{performanceId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/shows/performance/:performanceId',{performanceId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .directive('addTickets', function() {

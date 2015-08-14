@@ -2,10 +2,11 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'bootstrap',
     'angularRoute',
     'angularResource'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.monitorView', ['ngRoute', 'ngResource'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/monitor', {
@@ -14,7 +15,7 @@ define([
             });
         }])
         .factory('EventResource', function($resource){
-            var resource = $resource('rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .controller('MonitorController', ['$scope', '$http', '$timeout', 'EventResource', function($scope, $http, $timeout, EventResource) {
@@ -25,8 +26,8 @@ define([
              * Note that this is not a Backbone model.
              */
             var Bot = function() {
-                this.statusUrl = 'rest/bot/status';
-                this.messagesUrl = 'rest/bot/messages';
+                this.statusUrl = config.baseUrl + 'rest/bot/status';
+                this.messagesUrl = config.baseUrl + 'rest/bot/messages';
             };
 
             /*
@@ -82,7 +83,7 @@ define([
             };
 
             var fetchMetrics = function() {
-                $http.get("rest/metrics")
+                $http.get(config.baseUrl + "rest/metrics")
                     .then(function(response){
                         $scope.metrics = response.data;
                     });

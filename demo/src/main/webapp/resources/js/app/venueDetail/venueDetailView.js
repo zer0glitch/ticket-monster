@@ -2,10 +2,11 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'bootstrap',
     'angularRoute',
     'angularResource'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.venueDetailView', ['ngRoute', 'ngResource'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/venues/:venueId', {
@@ -18,21 +19,23 @@ define([
                 restrict: 'A',
                 template: '',
                 link: function(scope, el, attrs) {
-                    $(el).popover({
-                        trigger: 'hover',
-                        container: '#content',
-                        content: attrs.content,
-                        title: attrs.originalTitle
-                    });
+                	if(!Modernizr.touch) {
+	                    $(el).popover({
+	                        trigger: 'hover',
+	                        container: '#content',
+	                        content: attrs.content,
+	                        title: attrs.originalTitle
+	                    });
+                	}
                 }
             };
         })
         .factory('VenueResource', function($resource){
-            var resource = $resource('rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .factory('ShowResource', function($resource){
-            var resource = $resource('rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .controller('VenueDetailController', ['$scope', '$routeParams', '$location', 'VenueResource', 'ShowResource', function($scope, $routeParams, $location, VenueResource, ShowResource) {

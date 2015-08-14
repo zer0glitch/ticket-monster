@@ -2,10 +2,11 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'bootstrap',
     'angularRoute',
     'angularResource'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.eventDetailView', ['ngRoute', 'ngResource'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/events/:eventId', {
@@ -18,28 +19,31 @@ define([
                 restrict: 'A',
                 template: '',
                 link: function(scope, el, attrs) {
-                    $(el).popover({
-                        trigger: 'hover',
-                        container: '#content',
-                        content: attrs.content,
-                        title: attrs.originalTitle
-                    });
+                	if(!Modernizr.touch) {
+	                    $(el).popover({
+	                        trigger: 'hover',
+	                        container: '#content',
+	                        content: attrs.content,
+	                        title: attrs.originalTitle
+	                    });
+                	}
                 }
             };
         })
         .factory('EventResource', function($resource){
-            var resource = $resource('rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .factory('ShowResource', function($resource){
-            var resource = $resource('rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .factory('ShowResource', function($resource){
-            var resource = $resource('rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .controller('EventDetailController', ['$scope', '$routeParams', '$location', 'EventResource', 'ShowResource', function($scope, $routeParams, $location, EventResource, ShowResource) {
+        	$scope.config = config;
             EventResource.get({eventId:$routeParams.eventId}, function(data) {
                 $scope.event = data;
                 ShowResource.queryAll({event:$scope.event.id}, function(data) {

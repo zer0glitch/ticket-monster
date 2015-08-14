@@ -2,10 +2,11 @@
 define([
     'angular',
     'underscore',
+    'configuration',
     'bootstrap',
     'angularRoute',
     'angularResource'
-], function(angular, _) {
+], function(angular, _, config) {
     angular.module('ticketMonster.venuesView', ['ngRoute', 'ngResource'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/venues', {
@@ -18,20 +19,23 @@ define([
                 restrict: 'A',
                 template: '',
                 link: function(scope, el, attrs) {
-                    $(el).popover({
-                        trigger: 'hover',
-                        container: '#content',
-                        content: attrs.content,
-                        title: attrs.originalTitle
-                    });
+                	if(!Modernizr.touch) {
+                		$(el).popover({
+                			trigger: 'hover',
+                			container: '#content',
+                			content: attrs.content,
+                			title: attrs.originalTitle
+                		});
+                	}
                 }
             };
         })
         .factory('VenueResource', function($resource){
-            var resource = $resource('rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
+            var resource = $resource(config.baseUrl + 'rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
             return resource;
         })
         .controller('VenuesController', ['$scope','VenueResource', function($scope, VenueResource) {
+        	$scope.config = config;
             $scope.venues = VenueResource.queryAll(function(data) {
                 $scope.venues = data;
                 $scope.cities = _.uniq(

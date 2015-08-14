@@ -262,6 +262,13 @@ footer {
     text-shadow: 0 1px 0 #fff;
 }
 
+@media (max-width: 767px) {
+	/* Expand anchors to fill available width */
+	.panel-body a {
+		display: block;
+	}
+}
+
 .panel-body a:hover {
     color: #1e91aa;
 }
