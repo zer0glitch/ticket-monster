@@ -118,7 +118,9 @@ footer {
 .btn-primary:active,
 .btn-primary.active,
 .btn-primary.disabled,
-.btn-primary[disabled] {
+.btn-primary[disabled],
+.btn-primary.disabled:hover,
+.btn-primary[disabled]:hover {
     background-color: #e24f4d;
     border: 1px solid #ac2925;
 }
