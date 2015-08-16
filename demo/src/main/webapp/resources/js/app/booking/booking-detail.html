@@ -13,9 +13,9 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="well">
+        <div class="well table-stack">
             <h4 class="page-header">Ticket allocations</h4>
-            <table class="table table-striped table-bordered" style="background-color: #fffffa;">
+            <table class="table table-bordered table-striped table-condensed" style="background-color: #fffffa;">
                 <thead>
                 <tr>
                     <th>Ticket #</th>
@@ -27,11 +27,11 @@
                 </thead>
                 <tbody ng-repeat="ticket in booking.tickets">
                 <tr>
-                    <td>{{ticket.id}}</td>
-                    <td>{{ticket.ticketCategory.description}}</td>
-                    <td>{{ticket.seat.section.name}}</td>
-                    <td>{{ticket.seat.rowNumber}}</td>
-                    <td>{{ticket.seat.number}}</td>
+                    <td data-title="Ticket #">{{ticket.id}}</td>
+                    <td data-title="Category">{{ticket.ticketCategory.description}}</td>
+                    <td data-title="Section">{{ticket.seat.section.name}}</td>
+                    <td data-title="Row">{{ticket.seat.rowNumber}}</td>
+                    <td data-title="Seat">{{ticket.seat.number}}</td>
                 </tr>
                 </tbody>
             </table>

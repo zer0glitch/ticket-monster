@@ -481,3 +481,56 @@ a.highlight-link {
     color: #EDF4EA;
 }
 
+@media ( max-width : 767px) {
+	
+	/*
+	  Responsive table based on http://elvery.net/demo/responsive-tables/#no-more-tables
+	 */
+	
+	/* Force table to not be like tables anymore */
+	.table-stack table,
+	.table-stack thead,
+	.table-stack tbody,
+	.table-stack th,
+	.table-stack td,
+	.table-stack tr {
+		display: block;
+		word-wrap: break-word;
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	.table-stack thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	.table-stack tr {
+		border: 1px solid #ccc;
+	}
+	.table-stack td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 50% !important; /* Important for iOS */
+		text-align: left;
+		white-space: normal;
+	}
+	.table-stack td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%;
+		padding-right: 10px;
+		white-space: nowrap;
+		text-align: left;
+		font-weight: bold;
+	}
+
+	/*
+	  Label the data
+	 */
+	.table-stack td:before { content: attr(data-title); }
+}
