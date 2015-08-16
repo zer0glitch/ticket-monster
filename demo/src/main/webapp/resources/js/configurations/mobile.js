@@ -66,7 +66,9 @@ require([
         $('head').append('<link rel="stylesheet" href="resources/css/bootstrap.css" type="text/css" media="all"/>');
         $('head').append('<link rel="stylesheet" href="resources/css/bootstrap-theme.css" type="text/css" media="all"/>');
         $('head').append('<link rel="stylesheet" href="resources/css/screen.css" type="text/css" media="all"/>');
-        $('head').append('<link href="http://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet" type="text/css">');
+        if(!window.cordova) {
+            $('head').append('<link href="http://fonts.googleapis.com/css?family=Rokkitt" rel="stylesheet" type="text/css">');
+        }
 
         $.ajax({
             url:'resources/js/app/aggregator/main.html',
