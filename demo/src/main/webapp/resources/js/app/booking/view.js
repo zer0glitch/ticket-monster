@@ -173,6 +173,7 @@ define([
                     }
                 });
                 $scope.selectedSection = null;
+                $scope.toggleView();
             };
         }])
         .controller('CheckoutController', ['$scope', '$routeParams', '$location', 'BookingService', 'ShowResource', 'BookingResource', function($scope, $routeParams, $location, BookingService, ShowResource, BookingResource) {
