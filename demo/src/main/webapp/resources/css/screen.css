@@ -226,6 +226,7 @@ footer {
     /* Removes the box-shadow from IE due to glitches involving transitions */
     box-shadow: none;
     border-radius: 2px;
+    margin-bottom: 5%;
 }
 
 .panel {
@@ -278,6 +279,7 @@ footer {
 /* Carousel */
 .carousel-container {
     width: 640px;
+    margin: 0% auto;
 }
 
 .carousel-control {
@@ -307,7 +309,7 @@ footer {
 
 .carousel-caption p {
     font-weight: bold;
-    text-align: left;
+    text-align: justify;
 }
 
 .carousel-caption .action {
