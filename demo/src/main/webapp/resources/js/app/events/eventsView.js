@@ -6,34 +6,16 @@ define([
     'bootstrap',
     'angularRoute',
     'angularResource',
-    'app/api/services'
+    'app/api/services',
+    'app/components/components'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.eventsView', ['ngRoute', 'ngResource', 'ticketMonster.api'])
+    angular.module('ticketMonster.eventsView', ['ngRoute', 'ngResource', 'ticketMonster.api', 'ticketMonster.ui.components'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/events', {
                 templateUrl: 'resources/js/app/events/events.html',
                 controller: 'EventsController'
             });
         }])
-        .directive('menuPopover', function () {
-            return {
-                restrict: 'A',
-                template: '',
-                link: function(scope, el, attrs) {
-                	if(!Modernizr.touch) {
-	                    $(el).popover({
-	                        trigger: 'hover',
-	                        container: '#content',
-	                        content: attrs.content,
-	                        title: attrs.originalTitle
-                        }).data('bs.popover')
-                            .tip()
-                            .addClass('visible-lg')
-                            .addClass('visible-md');
-                	}
-                }
-            };
-        })
         .controller('EventsController', ['$scope','EventResource', function($scope, EventResource) {
         	$scope.config = config;
             $scope.events = EventResource.queryAll(function(data) {

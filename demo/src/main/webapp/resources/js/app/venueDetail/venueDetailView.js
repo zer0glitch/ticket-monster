@@ -15,25 +15,6 @@ define([
                 controller: 'VenueDetailController'
             });
         }])
-        .directive('menuPopover', function () {
-            return {
-                restrict: 'A',
-                template: '',
-                link: function(scope, el, attrs) {
-                	if(!Modernizr.touch) {
-	                    $(el).popover({
-	                        trigger: 'hover',
-	                        container: '#content',
-	                        content: attrs.content,
-	                        title: attrs.originalTitle
-	                    }).data('bs.popover')
-                            .tip()
-                            .addClass('visible-lg')
-                            .addClass('visible-md');
-                	}
-                }
-            };
-        })
         .controller('VenueDetailController', ['$scope', '$routeParams', '$location', 'VenueResource', 'ShowResource', function($scope, $routeParams, $location, VenueResource, ShowResource) {
             VenueResource.get({venueId:$routeParams.venueId}, function(data) {
                 $scope.venue = data;
