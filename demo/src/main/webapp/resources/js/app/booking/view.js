@@ -62,6 +62,7 @@ define([
                 cart.tickets = [];
                 cart.totals = [];
                 cart.performance = {};
+                cart.updateTotals();
             };
 
             cart.getTotals = function() {
@@ -105,7 +106,7 @@ define([
             };
 
             cart.isEmpty = function() {
-                return (cart.totals.tickets > 0);
+                return (cart.totals.tickets === 0);
             };
 
             cart.reset();
@@ -113,7 +114,15 @@ define([
             return cart;
         })
         .controller('BookingController', ['$scope', '$routeParams', '$location', 'BookingService', function($scope, $routeParams, $location, BookingService) {
+            $scope.toggleView = function() {
+                $scope.displayView = !$scope.displayView;
+            };
 
+            $scope.disableToggle = function() {
+                return BookingService.isEmpty();
+            };
+
+            $scope.displayView = true;
         }])
         .controller('TicketsController', ['$scope', '$routeParams', '$location', 'BookingService', 'ShowResource', 'BookingResource', function($scope, $routeParams, $location, BookingService, ShowResource, BookingResource) {
             console.log("In Tickets View");
@@ -183,8 +192,8 @@ define([
                 BookingService.removeTicket(index);
             };
 
-            $scope.enableCheckout = function() {
-                return !(BookingService.isEmpty()
+            $scope.disableCheckout = function() {
+                return !(!BookingService.isEmpty()
                     && $scope.bookingRequest.email != undefined
                     && $scope.bookingRequest.email != '');
             };
@@ -203,13 +212,6 @@ define([
                     console.log("Failure");
                 });
             };
-
-            $scope.toggleView = function() {
-                $scope.displayView = !$scope.displayView;
-            };
-
-            $scope.displayView = true;
-
         }])
         .controller('BookingDetailController', ['$scope', '$routeParams', '$location', 'BookingResource', 'PerformanceDetailsResource', function($scope, $routeParams, $location, BookingResource, PerformanceDetailsResource) {
 

@@ -24,7 +24,7 @@
                 <input type="button" class="btn btn-primary" ng-disabled="checkTickets()" ng-click="addTickets()" name="add" value="Add tickets"/>
             </div>
             <div class="col-xs-6">
-                <input type="button" class="btn btn-primary" ng-click="toggleView()" name="add" value="Checkout" />
+                <input type="button" class="btn btn-primary" ng-disabled="disableToggle()" ng-click="toggleView()" name="add" value="Checkout" />
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
             </div>
             <div class="col-xs-6">
                 <input type='button' class="btn btn-primary" name="submit" value="Checkout"
-                       ng-disabled="enableCheckout()" ng-click="checkout()" />
+                       ng-disabled="disableCheckout()" ng-click="checkout()" />
             </div>
         </div>
     </div>
