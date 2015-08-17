@@ -3,9 +3,10 @@ define([
     'angular',
     'underscore',
     'configuration',
-    'angularRoute'
+    'angularRoute',
+    'app/api/services'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.bookingView', ['ngRoute'])
+    angular.module('ticketMonster.bookingView', ['ngRoute', 'ticketMonster.api'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider
                 .when('/book/:showId/:performanceId', {
@@ -27,18 +28,6 @@ define([
                 start = parseInt(start, 10);
                 return input.slice(start);
             };
-        })
-        .factory('ShowResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
-        .factory('BookingResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/bookings/:bookingId',{bookingId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
-        .factory('PerformanceDetailsResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/shows/performance/:performanceId',{performanceId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
         })
         .directive('addTickets', function() {
             var link = function(scope, element, attributes) {

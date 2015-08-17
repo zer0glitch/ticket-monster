@@ -5,19 +5,16 @@ define([
     'configuration',
     'bootstrap',
     'angularRoute',
-    'angularResource'
+    'angularResource',
+    'app/api/services'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.monitorView', ['ngRoute', 'ngResource'])
+    angular.module('ticketMonster.monitorView', ['ngRoute', 'ngResource', 'ticketMonster.api'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/monitor', {
                 templateUrl: 'resources/js/app/monitor/monitor.html',
                 controller: 'MonitorController'
             });
         }])
-        .factory('EventResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
         .controller('MonitorController', ['$scope', '$http', '$timeout', 'EventResource', function($scope, $http, $timeout, EventResource) {
 
             /**

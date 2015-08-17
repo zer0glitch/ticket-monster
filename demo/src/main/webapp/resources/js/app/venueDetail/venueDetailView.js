@@ -5,9 +5,10 @@ define([
     'configuration',
     'bootstrap',
     'angularRoute',
-    'angularResource'
+    'angularResource',
+    'app/api/services'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.venueDetailView', ['ngRoute', 'ngResource'])
+    angular.module('ticketMonster.venueDetailView', ['ngRoute', 'ngResource', 'ticketMonster.api'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/venues/:venueId', {
                 templateUrl: 'resources/js/app/venueDetail/venueDetail.html',
@@ -32,14 +33,6 @@ define([
                 	}
                 }
             };
-        })
-        .factory('VenueResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
-        .factory('ShowResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
         })
         .controller('VenueDetailController', ['$scope', '$routeParams', '$location', 'VenueResource', 'ShowResource', function($scope, $routeParams, $location, VenueResource, ShowResource) {
             VenueResource.get({venueId:$routeParams.venueId}, function(data) {

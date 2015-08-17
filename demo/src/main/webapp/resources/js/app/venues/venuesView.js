@@ -5,9 +5,10 @@ define([
     'configuration',
     'bootstrap',
     'angularRoute',
-    'angularResource'
+    'angularResource',
+    'app/api/services'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.venuesView', ['ngRoute', 'ngResource'])
+    angular.module('ticketMonster.venuesView', ['ngRoute', 'ngResource', 'ticketMonster.api'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/venues', {
                 templateUrl: 'resources/js/app/venues/venues.html',
@@ -32,10 +33,6 @@ define([
                 	}
                 }
             };
-        })
-        .factory('VenueResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/venues/:venueId',{venueId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
         })
         .controller('VenuesController', ['$scope','VenueResource', function($scope, VenueResource) {
         	$scope.config = config;

@@ -5,9 +5,10 @@ define([
     'configuration',
     'bootstrap',
     'angularRoute',
-    'angularResource'
+    'angularResource',
+    'app/api/services'
 ], function(angular, _, config) {
-    angular.module('ticketMonster.eventDetailView', ['ngRoute', 'ngResource'])
+    angular.module('ticketMonster.eventDetailView', ['ngRoute', 'ngResource', 'ticketMonster.api'])
         .config(['$routeProvider', function($routeProvider) {
             $routeProvider.when('/events/:eventId', {
                 templateUrl: 'resources/js/app/eventDetail/eventDetail.html',
@@ -32,18 +33,6 @@ define([
                 	}
                 }
             };
-        })
-        .factory('EventResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/events/:eventId',{eventId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
-        .factory('ShowResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
-        })
-        .factory('ShowResource', function($resource){
-            var resource = $resource(config.baseUrl + 'rest/shows/:showId',{showId:'@id'},{'queryAll':{method:'GET',isArray:true},'query':{method:'GET',isArray:false},'update':{method:'PUT'}});
-            return resource;
         })
         .controller('EventDetailController', ['$scope', '$routeParams', '$location', 'EventResource', 'ShowResource', function($scope, $routeParams, $location, EventResource, ShowResource) {
         	$scope.config = config;

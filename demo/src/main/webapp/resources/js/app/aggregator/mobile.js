@@ -20,6 +20,7 @@ define("router", [
     return angular.module('ticketMonster', ['ngRoute',
         'ngResource',
         'ngTouch',
+        'ticketMonster.api',
         'ticketMonster.homeView',
         'ticketMonster.eventsView',
         'ticketMonster.venuesView',

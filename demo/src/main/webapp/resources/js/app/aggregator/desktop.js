@@ -18,6 +18,7 @@ define("router", [
 
     return angular.module('ticketMonster', ['ngRoute',
         'ngResource',
+        'ticketMonster.api',
         'ticketMonster.homeView',
         'ticketMonster.eventsView',
         'ticketMonster.venuesView',
