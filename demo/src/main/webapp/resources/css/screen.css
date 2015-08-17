@@ -395,9 +395,9 @@ ul.pagination .active > a:hover {
     margin-top: 5%;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1024px) {
     .top4 {
-        margin-top: 4%;
+        margin: 15px 0;
     }
 }
 
