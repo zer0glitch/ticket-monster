@@ -71,7 +71,7 @@ define([
             });
 
             $scope.beginBooking = function() {
-                $location.path('/book/' + $scope.selectedShow.venue.id + '/' + $scope.selectedPerformance.id);
+                $location.path('/book/' + $scope.selectedShow.id + '/' + $scope.selectedPerformance.id);
             }
         }]);
 });
