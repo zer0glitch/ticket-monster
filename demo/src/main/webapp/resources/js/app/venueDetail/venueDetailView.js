@@ -25,7 +25,10 @@ define([
 	                        container: '#content',
 	                        content: attrs.content,
 	                        title: attrs.originalTitle
-	                    });
+	                    }).data('bs.popover')
+                            .tip()
+                            .addClass('visible-lg')
+                            .addClass('visible-md');
                 	}
                 }
             };
